@@ -1,0 +1,3338 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ATELIER DESK — 매거진 브랜드 협업 & AI 워크스페이스</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Pretendard', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            serif: ['Cormorant Garamond', 'serif'],
+          },
+          colors: {
+            paper: '#FAF9F6',
+            ink: '#18181B',
+            stone: '#F2F0EB',
+            terracotta: '#C85A32',
+            sage: '#3D6B5E',
+            cobalt: '#2563EB',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #FAF9F6;
+      color: #18181B;
+      font-family: 'Pretendard', 'Inter', sans-serif;
+    }
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #D6D3CD;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #A8A39B;
+    }
+    .kanban-col {
+      min-width: 280px;
+      max-width: 310px;
+    }
+  </style>
+</head>
+<body class="antialiased selection:bg-[#18181B] selection:text-[#FAF9F6]">
+
+  <!-- =========================================================
+       AUTH GATE SCREEN (NOTION-STYLE EDITORIAL LOGIN / SIGNUP)
+       ========================================================= -->
+  <div id="auth-gate" class="min-h-screen flex items-center justify-center p-4 bg-[#FAF9F6]">
+    <div class="w-full max-w-4xl bg-white rounded-3xl shadow-xl border border-neutral-200/90 overflow-hidden grid grid-cols-1 lg:grid-cols-12">
+      
+      <!-- Left Editorial Brand Showcase -->
+      <div class="lg:col-span-5 bg-[#18181B] text-[#FAF9F6] p-8 sm:p-10 flex flex-col justify-between">
+        <div>
+          <p class="text-[11px] font-semibold tracking-[0.22em] uppercase text-[#F4A261]">Editorial Collaboration OS</p>
+          <h1 class="font-serif text-4xl font-bold tracking-tight mt-2">ATELIER DESK</h1>
+          <p class="text-xs text-neutral-300 mt-3 leading-relaxed">
+            인스타그램 매거진 에디터 팀을 위한 브랜드 협업 파이프라인 & AI 자동 응대 워크스페이스
+          </p>
+        </div>
+
+        <div class="space-y-4 my-8 text-xs">
+          <div class="flex items-start gap-3">
+            <span class="w-6 h-6 rounded-lg bg-white/10 text-[#F4A261] flex items-center justify-center font-bold shrink-0">01</span>
+            <div>
+              <p class="font-semibold text-white">팀원별 고유 ID & 실시간 클라우드 동기화</p>
+              <p class="text-neutral-400 text-[11px] mt-0.5">새로고침해도 모든 진행 내역과 코멘트가 영구 보존됩니다.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="w-6 h-6 rounded-lg bg-white/10 text-[#F4A261] flex items-center justify-center font-bold shrink-0">02</span>
+            <div>
+              <p class="font-semibold text-white">노션 스타일 초대 코드 워크스페이스</p>
+              <p class="text-neutral-400 text-[11px] mt-0.5">워크스페이스 코드 하나로 에디터·PD·AE가 즉시 합류합니다.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="w-6 h-6 rounded-lg bg-white/10 text-[#F4A261] flex items-center justify-center font-bold shrink-0">03</span>
+            <div>
+              <p class="font-semibold text-white">우리 매거진 톤앤매너 학습 AI 응대</p>
+              <p class="text-neutral-400 text-[11px] mt-0.5">DM·메일 원문 분석부터 단가·2차 활용 조율 초안까지 자동 생성합니다.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-4 border-t border-white/10 flex items-center justify-between text-[11px] text-neutral-400">
+          <span>Powered by Gemini & Cloud Sync</span>
+          <span>v2.0 Multi-User</span>
+        </div>
+      </div>
+
+      <!-- Right Login / Signup Form -->
+      <div class="lg:col-span-7 p-8 sm:p-10 flex flex-col justify-center">
+        <!-- Auth Mode Tabs -->
+        <div class="flex p-1 bg-[#FAF9F6] border border-neutral-200 rounded-xl mb-6">
+          <button id="tab-login-btn" onclick="switchAuthTab('login')" class="flex-1 py-2 text-xs font-bold rounded-lg bg-white text-[#18181B] shadow-2xs transition">
+            팀원 로그인
+          </button>
+          <button id="tab-signup-btn" onclick="switchAuthTab('signup')" class="flex-1 py-2 text-xs font-medium rounded-lg text-neutral-500 hover:text-[#18181B] transition">
+            새 계정 만들기 (회원가입)
+          </button>
+        </div>
+
+        <!-- Login Form -->
+        <form id="login-form" onsubmit="handleEmailLogin(event)" class="space-y-4">
+          <div>
+            <h2 class="text-lg font-bold text-[#18181B]">워크스페이스에 로그인</h2>
+            <p class="text-xs text-neutral-500 mt-0.5">가입하신 에디터 이메일 계정으로 접속하세요.</p>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-neutral-700 mb-1">이메일 ID</label>
+            <input id="login-email" type="email" required placeholder="editor@magazine.kr" class="w-full px-3.5 py-2.5 text-xs bg-[#FAF9F6] border border-neutral-200 rounded-xl focus:outline-none focus:border-[#18181B]">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-neutral-700 mb-1">비밀번호</label>
+            <input id="login-password" type="password" required placeholder="••••••••" class="w-full px-3.5 py-2.5 text-xs bg-[#FAF9F6] border border-neutral-200 rounded-xl focus:outline-none focus:border-[#18181B]">
+          </div>
+
+          <p id="login-error-msg" class="hidden text-xs text-red-600 bg-red-50 p-2.5 rounded-lg border border-red-200"></p>
+
+          <button type="submit" id="btn-submit-login" class="w-full py-3 bg-[#18181B] hover:bg-neutral-800 text-white text-xs font-semibold rounded-xl shadow-sm transition">
+            로그인하고 워크스페이스 열기
+          </button>
+        </form>
+
+        <!-- Signup Form -->
+        <form id="signup-form" onsubmit="handleEmailSignup(event)" class="hidden space-y-3.5">
+          <div>
+            <h2 class="text-lg font-bold text-[#18181B]">매거진 팀원 계정 등록</h2>
+            <p class="text-xs text-neutral-500 mt-0.5">본인만의 계정으로 활동 기록과 담당 협업이 구분됩니다.</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-neutral-700 mb-1">표시 이름 (활동명) *</label>
+              <input id="signup-name" type="text" required placeholder="예: 김지수" class="w-full px-3.5 py-2 text-xs bg-[#FAF9F6] border border-neutral-200 rounded-xl focus:outline-none focus:border-[#18181B]">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-neutral-700 mb-1">직책 / 역할 *</label>
+              <select id="signup-role" class="w-full px-3.5 py-2 text-xs bg-[#FAF9F6] border border-neutral-200 rounded-xl focus:outline-none focus:border-[#18181B]">
+                <option value="총괄 에디터">총괄 에디터</option>
+                <option value="피처 에디터">피처 에디터</option>
+                <option value="콘텐츠/릴스 PD">콘텐츠/릴스 PD</option>
+                <option value="브랜드 파트너십 AE">브랜드 파트너십 AE</option>
+                <option value="아트 디렉터">아트 디렉터</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-neutral-700 mb-1">이메일 ID *</label>
+            <input id="signup-email" type="email" required placeholder="jisu@magazine.kr" class="w-full px-3.5 py-2 text-xs bg-[#FAF9F6] border border-neutral-200 rounded-xl focus:outline-none focus:border-[#18181B]">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-neutral-700 mb-1">비밀번호 (6자 이상) *</label>
+            <input id="signup-password" type="password" required minlength="6" placeholder="6자 이상 입력" class="w-full px-3.5 py-2 text-xs bg-[#FAF9F6] border border-neutral-200 rounded-xl focus:outline-none focus:border-[#18181B]">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-neutral-700 mb-1">팀 워크스페이스 초대 코드 (선택)</label>
+            <input id="signup-invite-code" type="text" placeholder="팀장에게 받은 코드가 있다면 입력 (비워두면 새 워크스페이스 자동 생성)" class="w-full px-3.5 py-2 text-xs bg-[#FAF9F6] border border-neutral-200 rounded-xl focus:outline-none focus:border-[#18181B]">
+          </div>
+
+          <p id="signup-error-msg" class="hidden text-xs text-red-600 bg-red-50 p-2.5 rounded-lg border border-red-200"></p>
+
+          <button type="submit" id="btn-submit-signup" class="w-full py-3 bg-[#18181B] hover:bg-neutral-800 text-white text-xs font-semibold rounded-xl shadow-sm transition">
+            계정 생성 및 시작하기
+          </button>
+        </form>
+
+        <!-- Quick Demo Login Option -->
+        <div class="mt-6 pt-5 border-t border-neutral-100 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <span class="text-[11px] text-neutral-500">가입 없이 먼저 기능을 둘러보고 싶으신가요?</span>
+          <button type="button" onclick="handleDemoQuickEnter()" class="px-3.5 py-2 text-xs font-semibold text-[#C85A32] bg-[#FFF8F5] hover:bg-[#ffefe8] border border-[#C85A32]/30 rounded-xl transition shrink-0">
+            데모 계정으로 바로 체험하기 →
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       MAIN WORKSPACE APP (HIDDEN UNTIL AUTHENTICATED)
+       ========================================================= -->
+  <div id="app" class="hidden min-h-screen flex-col lg:flex-row">
+    
+    <!-- Mobile Header -->
+    <div class="lg:hidden flex items-center justify-between px-4 py-3 bg-white border-b border-neutral-200 sticky top-0 z-30">
+      <div class="flex items-center gap-2.5">
+        <button id="mobile-menu-btn" class="p-2 rounded-lg hover:bg-neutral-100 text-neutral-800" aria-label="메뉴 열기">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <span class="font-serif text-xl font-bold tracking-tight">ATELIER DESK</span>
+      </div>
+      <button onclick="openTab('ai-analyzer')" class="px-3 py-1.5 bg-[#18181B] text-white text-xs font-medium rounded-lg shadow-sm">
+        + AI 문의 분석
+      </button>
+    </div>
+
+    <!-- Sidebar Backdrop (Mobile) -->
+    <div id="sidebar-backdrop" class="fixed inset-0 bg-black/40 z-30 hidden lg:hidden" onclick="toggleSidebar(false)"></div>
+
+    <!-- Left Sidebar Navigation (Notion-Style Workspace Switcher + Nav) -->
+    <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 z-40 w-68 max-w-[272px] w-full bg-white border-r border-neutral-200/90 flex flex-col justify-between transform -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-in-out">
+      <div>
+        <!-- Notion-Style Workspace Switcher Header -->
+        <div class="p-4 border-b border-neutral-100">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[10px] font-bold tracking-[0.2em] uppercase text-[#C85A32]">ATELIER DESK</span>
+            <button class="lg:hidden p-1 text-neutral-500 hover:text-black" onclick="toggleSidebar(false)">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+
+          <button onclick="openWorkspaceModal()" class="w-full p-2.5 rounded-xl bg-[#FAF9F6] hover:bg-[#F2F0EB] border border-neutral-200/90 flex items-center justify-between text-left transition group">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <div id="ws-icon-badge" class="w-8 h-8 rounded-lg bg-[#18181B] text-white font-serif font-bold text-base flex items-center justify-center shrink-0">
+                M
+              </div>
+              <div class="min-w-0">
+                <p id="ws-current-name" class="text-xs font-bold text-[#18181B] truncate">로딩 중...</p>
+                <p id="ws-current-code-label" class="text-[10px] text-neutral-500 truncate">코드: ---</p>
+              </div>
+            </div>
+            <svg class="w-4 h-4 text-neutral-400 group-hover:text-[#18181B] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l4-4 4 4m0 6l-4 4-4-4"/></svg>
+          </button>
+
+          <!-- Quick Invite Copy Bar -->
+          <div class="mt-2 flex items-center justify-between px-2 py-1.5 rounded-lg bg-neutral-50 border border-neutral-200/60 text-[10px]">
+            <span class="text-neutral-500 truncate">초대코드: <strong id="ws-invite-code-display" class="text-[#18181B] font-mono">---</strong></span>
+            <button onclick="copyWorkspaceInviteCode()" class="text-[#2563EB] hover:underline font-semibold shrink-0 ml-2">코드 복사</button>
+          </div>
+        </div>
+
+        <!-- Navigation Menu -->
+        <nav class="p-3.5 space-y-1">
+          <button data-tab="pipeline" onclick="openTab('pipeline')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all bg-[#18181B] text-white shadow-sm">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2"/></svg>
+              협업 파이프라인
+            </span>
+            <span id="nav-count-pipeline" class="text-[11px] px-1.5 py-0.5 rounded-md bg-white/20 text-white">0</span>
+          </button>
+
+          <button data-tab="calendar" onclick="openTab('calendar')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium text-neutral-600 hover:bg-neutral-100 transition-all">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+              협업 캘린더
+            </span>
+          </button>
+
+          <button data-tab="ai-analyzer" onclick="openTab('ai-analyzer')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium text-neutral-600 hover:bg-neutral-100 transition-all">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4 text-[#C85A32]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+              AI 메일/DM 분석기
+            </span>
+            <span class="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-[#C85A32]/10 text-[#C85A32]">AI</span>
+          </button>
+
+          <button data-tab="settings" onclick="openTab('settings')" class="nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium text-neutral-600 hover:bg-neutral-100 transition-all">
+            <span class="flex items-center gap-3">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+              톤앤매너 & 단가/샘플
+            </span>
+          </button>
+        </nav>
+
+        <!-- Quick KPI Summary Card -->
+        <div class="mx-3.5 mt-3 p-4 rounded-2xl bg-[#FAF9F6] border border-neutral-200/80">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-[11px] font-semibold uppercase tracking-wider text-neutral-500">워크스페이스 현황</span>
+            <span id="kpi-member-count" class="text-[10px] font-semibold text-[#3D6B5E] bg-[#3D6B5E]/10 px-2 py-0.5 rounded-full">
+              팀원 1명
+            </span>
+          </div>
+          <div class="space-y-2 mt-3">
+            <div class="flex justify-between items-baseline">
+              <span class="text-xs text-neutral-500">진행 중 협업</span>
+              <span id="kpi-active-count" class="text-sm font-bold text-[#18181B]">0건</span>
+            </div>
+            <div class="flex justify-between items-baseline">
+              <span class="text-xs text-neutral-500">예상/확정 매출</span>
+              <span id="kpi-total-budget" class="text-sm font-bold text-[#C85A32]">0만원</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Authenticated User Footer -->
+      <div class="p-4 border-t border-neutral-100 bg-neutral-50/70">
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <div id="user-avatar" class="w-8 h-8 rounded-full bg-[#18181B] text-white flex items-center justify-center text-xs font-bold shrink-0">
+              ED
+            </div>
+            <div class="min-w-0">
+              <p id="user-name" class="text-xs font-bold text-[#18181B] truncate">사용자</p>
+              <p id="user-role-email" class="text-[10px] text-neutral-500 truncate">에디터</p>
+            </div>
+          </div>
+          <button onclick="handleLogout()" title="로그아웃" class="px-2.5 py-1.5 text-[11px] font-medium bg-white border border-neutral-200 rounded-lg hover:bg-red-50 hover:text-red-600 hover:border-red-200 text-neutral-600 shrink-0 transition">
+            로그아웃
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Workspace Area -->
+    <main class="flex-1 flex flex-col min-w-0">
+      
+      <!-- Top Desktop Header -->
+      <header class="hidden lg:flex items-center justify-between px-8 py-4 bg-white/85 backdrop-blur-md border-b border-neutral-200/80 sticky top-0 z-20">
+        <div>
+          <div class="flex items-center gap-2.5">
+            <h2 id="page-title" class="text-lg font-bold text-[#18181B]">협업 파이프라인</h2>
+            <!-- Cloud Sync Status Pill -->
+            <button onclick="openExternalConfigModal()" id="cloud-sync-pill" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/80 hover:opacity-80 transition" title="클라우드 및 AI API 연결 설정">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              <span id="cloud-sync-text">클라우드 저장됨</span>
+            </button>
+          </div>
+          <p id="page-subtitle" class="text-xs text-neutral-500 mt-0.5">브랜드 문의 접수부터 콘텐츠 발행, 정산까지 팀원들과 실시간 영구 동기화됩니다.</p>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <!-- Real Workspace Members Avatar Stack -->
+          <button onclick="openWorkspaceModal()" id="header-members-stack" class="flex items-center -space-x-2 mr-1 hover:opacity-85 transition" title="워크스페이스 멤버 보기 및 초대">
+            <!-- Member avatars injected via JS -->
+          </button>
+
+          <button onclick="openNewDealModal()" class="px-3.5 py-2 text-xs font-medium text-neutral-700 bg-white border border-neutral-200 rounded-xl hover:bg-neutral-50 transition">
+            + 수동 건 등록
+          </button>
+          <button onclick="openTab('ai-analyzer')" class="px-4 py-2 text-xs font-semibold text-white bg-[#18181B] rounded-xl hover:bg-neutral-800 shadow-sm flex items-center gap-1.5 transition">
+            <svg class="w-3.5 h-3.5 text-[#F4A261]" fill="currentColor" viewBox="0 0 20 20"><path d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"/></svg>
+            새 협업 메일/DM 접수
+          </button>
+        </div>
+      </header>
+
+      <!-- Content Views Container -->
+      <div class="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1600px] w-full mx-auto">
+
+        <!-- =========================================================
+             VIEW 1: COLLABORATION PIPELINE (KANBAN & LIST)
+             ========================================================= -->
+        <section id="view-pipeline" class="space-y-5">
+          <!-- Empty Workspace Onboarding Banner (Shown only when 0 deals) -->
+          <div id="empty-workspace-banner" class="hidden bg-white p-6 rounded-2xl border border-dashed border-[#C85A32]/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+              <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-[#C85A32]/10 text-[#C85A32] rounded">New Workspace</span>
+              <h3 class="text-sm font-bold text-[#18181B] mt-1">워크스페이스가 아직 비어 있습니다</h3>
+              <p class="text-xs text-neutral-500 mt-0.5">새 브랜드 문의를 AI로 등록하거나, 테스트용 샘플 협업 데이터 4건을 불러와 구조를 살펴보세요.</p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <button onclick="seedSampleDealsToWorkspace()" class="px-3.5 py-2 text-xs font-semibold bg-[#FAF9F6] hover:bg-neutral-200/70 border border-neutral-300 rounded-xl text-[#18181B] transition">
+                샘플 데이터 불러오기
+              </button>
+              <button onclick="openTab('ai-analyzer')" class="px-4 py-2 text-xs font-semibold bg-[#18181B] text-white rounded-xl hover:bg-neutral-800 transition">
+                + 첫 문의 AI 분석하기
+              </button>
+            </div>
+          </div>
+
+          <!-- Filter & Search Bar -->
+          <div class="bg-white p-4 rounded-2xl border border-neutral-200/80 shadow-2xs flex flex-col xl:flex-row xl:items-center justify-between gap-3">
+            <div class="flex flex-wrap items-center gap-2.5">
+              <!-- Search -->
+              <div class="relative w-full sm:w-60">
+                <svg class="w-4 h-4 text-neutral-400 absolute left-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                <input id="filter-search" type="text" placeholder="브랜드명, 캠페인 검색..." oninput="renderPipeline()" class="w-full pl-9 pr-3 py-1.5 text-xs bg-[#FAF9F6] border border-neutral-200 rounded-xl focus:outline-none focus:border-[#18181B]">
+              </div>
+
+              <!-- Category Filter -->
+              <select id="filter-category" onchange="renderPipeline()" class="px-3 py-1.5 text-xs bg-[#FAF9F6] border border-neutral-200 rounded-xl focus:outline-none focus:border-[#18181B]">
+                <option value="ALL">모든 카테고리</option>
+                <option value="패션/뷰티">패션/뷰티</option>
+                <option value="라이프스타일">라이프스타일</option>
+                <option value="F&B">F&B</option>
+                <option value="문화/전시">문화/전시</option>
+                <option value="IT/테크">IT/테크</option>
+              </select>
+
+              <!-- Dynamic Workspace Member Filter -->
+              <select id="filter-editor" onchange="renderPipeline()" class="px-3 py-1.5 text-xs bg-[#FAF9F6] border border-neutral-200 rounded-xl focus:outline-none focus:border-[#18181B]">
+                <option value="ALL">모든 담당 에디터</option>
+              </select>
+
+              <!-- Settlement Filter -->
+              <select id="filter-settlement" onchange="renderPipeline()" class="px-3 py-1.5 text-xs bg-[#FAF9F6] border border-neutral-200 rounded-xl focus:outline-none focus:border-[#18181B]">
+                <option value="ALL">정산 상태 전체</option>
+                <option value="미청구">미청구</option>
+                <option value="계산서 발행">계산서 발행</option>
+                <option value="입금 완료">입금 완료</option>
+                <option value="바터(제품협찬)">바터(제품협찬)</option>
+              </select>
+            </div>
+
+            <!-- View Switcher (Kanban vs List) -->
+            <div class="flex items-center justify-between sm:justify-end gap-2">
+              <div class="inline-flex p-1 bg-[#FAF9F6] border border-neutral-200 rounded-xl">
+                <button id="btn-view-kanban" onclick="setPipelineMode('kanban')" class="px-3 py-1 text-xs font-semibold rounded-lg bg-white text-[#18181B] shadow-2xs transition">
+                  칸반 보드
+                </button>
+                <button id="btn-view-list" onclick="setPipelineMode('list')" class="px-3 py-1 text-xs font-medium rounded-lg text-neutral-500 hover:text-[#18181B] transition">
+                  리스트 뷰
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Kanban Board Container -->
+          <div id="kanban-container" class="flex gap-4 overflow-x-auto pb-4 items-start">
+            <!-- Columns injected via JS -->
+          </div>
+
+          <!-- List View Container -->
+          <div id="list-container" class="hidden bg-white rounded-2xl border border-neutral-200/80 overflow-hidden shadow-2xs">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left border-collapse">
+                <thead>
+                  <tr class="border-b border-neutral-200 bg-[#FAF9F6] text-[11px] font-semibold uppercase tracking-wider text-neutral-500">
+                    <th class="py-3.5 px-4">브랜드 / 캠페인</th>
+                    <th class="py-3.5 px-4">카테고리</th>
+                    <th class="py-3.5 px-4">진행 단계</th>
+                    <th class="py-3.5 px-4">콘텐츠 / 2차활용</th>
+                    <th class="py-3.5 px-4">협업 금액</th>
+                    <th class="py-3.5 px-4">업로드 마감일</th>
+                    <th class="py-3.5 px-4">담당자</th>
+                    <th class="py-3.5 px-4">정산 상태</th>
+                  </tr>
+                </thead>
+                <tbody id="list-tbody" class="divide-y divide-neutral-100 text-xs">
+                  <!-- Rows injected via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             VIEW 2: COLLABORATION CALENDAR
+             ========================================================= -->
+        <section id="view-calendar" class="hidden space-y-5">
+          <div class="bg-white p-5 rounded-2xl border border-neutral-200/80 shadow-2xs">
+            <!-- Calendar Top Controls -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+              <div class="flex items-center gap-3">
+                <h3 id="calendar-month-label" class="font-serif text-2xl font-bold text-[#18181B]">2026년 11월</h3>
+                <div class="flex items-center gap-1">
+                  <button onclick="changeMonth(-1)" class="p-1.5 rounded-lg border border-neutral-200 hover:bg-neutral-50 text-neutral-700">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                  </button>
+                  <button onclick="resetToToday()" class="px-2.5 py-1 text-xs font-medium rounded-lg border border-neutral-200 hover:bg-neutral-50">오늘</button>
+                  <button onclick="changeMonth(1)" class="p-1.5 rounded-lg border border-neutral-200 hover:bg-neutral-50 text-neutral-700">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Legend -->
+              <div class="flex flex-wrap items-center gap-3 text-[11px]">
+                <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>초안 마감일</span>
+                <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#18181B]"></span>최종 업로드일</span>
+                <span class="inline-flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full bg-[#3D6B5E]"></span>2차 광고 종료일</span>
+              </div>
+            </div>
+
+            <!-- Calendar Grid -->
+            <div class="grid grid-cols-7 border-t border-l border-neutral-200 rounded-xl overflow-hidden">
+              <div class="py-2.5 text-center text-[11px] font-semibold text-red-500 bg-[#FAF9F6] border-r border-b border-neutral-200">SUN</div>
+              <div class="py-2.5 text-center text-[11px] font-semibold text-neutral-600 bg-[#FAF9F6] border-r border-b border-neutral-200">MON</div>
+              <div class="py-2.5 text-center text-[11px] font-semibold text-neutral-600 bg-[#FAF9F6] border-r border-b border-neutral-200">TUE</div>
+              <div class="py-2.5 text-center text-[11px] font-semibold text-neutral-600 bg-[#FAF9F6] border-r border-b border-neutral-200">WED</div>
+              <div class="py-2.5 text-center text-[11px] font-semibold text-neutral-600 bg-[#FAF9F6] border-r border-b border-neutral-200">THU</div>
+              <div class="py-2.5 text-center text-[11px] font-semibold text-neutral-600 bg-[#FAF9F6] border-r border-b border-neutral-200">FRI</div>
+              <div class="py-2.5 text-center text-[11px] font-semibold text-blue-600 bg-[#FAF9F6] border-r border-b border-neutral-200">SAT</div>
+              
+              <div id="calendar-days-grid" class="col-span-7 grid grid-cols-7">
+                <!-- Days injected via JS -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             VIEW 3: AI INQUIRY ANALYZER & 2-STAGE WORKFLOW
+             ========================================================= -->
+        <section id="view-ai-analyzer" class="hidden space-y-6">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- Left Column: Step 1 Raw Intake Panel -->
+            <div class="lg:col-span-5 space-y-4">
+              <div class="bg-white p-5 rounded-2xl border border-neutral-200/80 shadow-2xs space-y-4">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-[#C85A32]">Step 01 · Raw Inquiry Intake</span>
+                    <h3 class="text-base font-bold text-[#18181B]">협업 메일 / DM 원문 접수</h3>
+                  </div>
+                  <div class="flex gap-1.5">
+                    <button onclick="loadSampleInquiry('email')" class="px-2.5 py-1 text-[11px] font-medium bg-[#FAF9F6] hover:bg-neutral-200/70 border border-neutral-200 rounded-lg text-neutral-700 transition">
+                      샘플 메일
+                    </button>
+                    <button onclick="loadSampleInquiry('dm')" class="px-2.5 py-1 text-[11px] font-medium bg-[#FAF9F6] hover:bg-neutral-200/70 border border-neutral-200 rounded-lg text-neutral-700 transition">
+                      샘플 DM(일정미정)
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex items-center justify-between mb-1.5">
+                    <label class="text-xs font-medium text-neutral-600">수신 채널</label>
+                    <select id="ai-channel-type" class="px-2.5 py-1 text-xs bg-[#FAF9F6] border border-neutral-200 rounded-lg focus:outline-none focus:border-[#18181B]">
+                      <option value="비즈니스 이메일">비즈니스 이메일</option>
+                      <option value="인스타그램 DM">인스타그램 DM</option>
+                    </select>
+                  </div>
+
+                  <textarea id="ai-raw-input" rows="12" placeholder="브랜드 담당자로부터 받은 메일이나 DM 본문을 그대로 붙여넣으세요.&#10;&#10;• [문의 접수 보드에 바로 등록]을 누르면 원문만 팩트 추출하여 '문의 접수' 단계에 저장합니다.&#10;• 팀 논의 후 카드를 열어 [진행/단가표/추가문의/거절]을 결정하면 AI가 맞춤 답장을 작성합니다." class="w-full p-3.5 text-xs leading-relaxed bg-[#FAF9F6] border border-neutral-200 rounded-xl focus:outline-none focus:border-[#18181B] resize-none"></textarea>
+                </div>
+
+                <div class="p-3 rounded-xl bg-emerald-50/70 border border-emerald-200/70 flex items-start gap-2.5">
+                  <svg class="w-4 h-4 text-[#3D6B5E] shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                  <p class="text-[11px] text-emerald-950 leading-relaxed">
+                    <strong>원문 팩트 기반 추출 원칙:</strong> 메일에 명시되지 않은 금액이나 업로드·초안 마감일은 AI가 임의로 추측하지 않고 <strong>'미기재'</strong>로 처리하여 캘린더 오염을 방지합니다.
+                  </p>
+                </div>
+
+                <!-- Two Primary Actions: Quick Intake vs Immediate Decision + Reply -->
+                <div class="space-y-2 pt-1">
+                  <button id="btn-quick-intake" onclick="runFactualIntakeAndRegister()" class="w-full py-3 px-4 bg-[#18181B] hover:bg-neutral-800 text-white text-xs font-semibold rounded-xl shadow-sm flex items-center justify-center gap-2 transition">
+                    <svg class="w-4 h-4 text-[#F4A261]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg>
+                    <span>원문 분석 후 '문의 접수' 단계에 바로 등록 (팀 논의용)</span>
+                  </button>
+                  <button id="btn-run-ai" onclick="runAIAnalysisOnly()" class="w-full py-2.5 px-4 bg-white hover:bg-[#FAF9F6] text-[#18181B] border border-neutral-300 text-xs font-semibold rounded-xl flex items-center justify-center gap-1.5 transition">
+                    <span>접수 전 미리 조건 파싱 & 결정별 답장 테스트하기</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column: Step 2 Factual Extraction + Team Decision + Reply Output -->
+            <div class="lg:col-span-7 space-y-4">
+              <!-- Empty State -->
+              <div id="ai-placeholder" class="bg-white p-10 rounded-2xl border border-dashed border-neutral-300 flex flex-col items-center justify-center text-center min-h-[480px]">
+                <div class="w-12 h-12 rounded-2xl bg-[#FAF9F6] border border-neutral-200 flex items-center justify-center mb-3">
+                  <svg class="w-6 h-6 text-[#C85A32]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                </div>
+                <h4 class="text-sm font-bold text-[#18181B]">좌측에 협업 문의를 붙여넣고 접수를 시작하세요</h4>
+                <p class="text-xs text-neutral-500 max-w-md mt-1.5 leading-relaxed">
+                  <strong>1) 원문 바로 등록:</strong> '문의 접수' 컬럼에 원문과 팩트 추출 결과만 먼저 저장해 팀원들과 논의할 수 있습니다.<br>
+                  <strong>2) 결정 기반 답장:</strong> 진행·단가표 전달·추가 문의·거절 중 방향을 정하면 AI가 정확한 회신 초안을 작성합니다.
+                </p>
+              </div>
+
+              <!-- Loading Spinner -->
+              <div id="ai-loading" class="hidden bg-white p-10 rounded-2xl border border-neutral-200 flex flex-col items-center justify-center text-center min-h-[480px]">
+                <div class="w-10 h-10 border-3 border-neutral-200 border-t-[#18181B] rounded-full animate-spin mb-4"></div>
+                <h4 id="ai-loading-title" class="text-sm font-bold text-[#18181B]">원문에서 명시된 조건과 근거 문구를 추출하고 있습니다...</h4>
+                <p class="text-xs text-neutral-500 mt-1">근거 없는 날짜·금액 추측을 배제하고 원문 팩트만 정확히 파싱 중</p>
+              </div>
+
+              <!-- AI Result & Decision Container -->
+              <div id="ai-result-box" class="hidden space-y-4">
+                
+                <!-- Card A: Grounded Factual Extraction -->
+                <div class="bg-white p-5 rounded-2xl border border-neutral-200/80 shadow-2xs">
+                  <div class="flex items-center justify-between mb-3.5">
+                    <div>
+                      <span class="text-[10px] font-bold uppercase tracking-widest text-[#3D6B5E]">Grounded Extraction · 원문 근거 파싱</span>
+                      <h4 class="text-sm font-bold text-[#18181B]">메일 내 명시된 조건 추출 결과 (수정 가능)</h4>
+                    </div>
+                    <span id="ai-parsed-category-badge" class="px-2.5 py-1 text-[11px] font-semibold rounded-full bg-neutral-100 text-neutral-800">라이프스타일</span>
+                  </div>
+
+                  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 text-xs">
+                    <div class="p-2.5 rounded-xl bg-[#FAF9F6] border border-neutral-200/70">
+                      <label class="text-[10px] text-neutral-500 block">브랜드명</label>
+                      <input id="parsed-brand" type="text" class="w-full font-semibold text-[#18181B] bg-transparent focus:outline-none mt-0.5">
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-[#FAF9F6] border border-neutral-200/70">
+                      <label class="text-[10px] text-neutral-500 block">캠페인 / 제품명</label>
+                      <input id="parsed-campaign" type="text" class="w-full font-semibold text-[#18181B] bg-transparent focus:outline-none mt-0.5">
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-[#FAF9F6] border border-neutral-200/70">
+                      <label class="text-[10px] text-neutral-500 block">카테고리</label>
+                      <select id="parsed-category" class="w-full font-semibold text-[#18181B] bg-transparent focus:outline-none mt-0.5">
+                        <option value="패션/뷰티">패션/뷰티</option>
+                        <option value="라이프스타일">라이프스타일</option>
+                        <option value="F&B">F&B</option>
+                        <option value="문화/전시">문화/전시</option>
+                        <option value="IT/테크">IT/테크</option>
+                      </select>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-[#FAF9F6] border border-neutral-200/70">
+                      <label class="text-[10px] text-neutral-500 block">콘텐츠 유형</label>
+                      <input id="parsed-content-type" type="text" placeholder="미기재" class="w-full font-semibold text-[#18181B] bg-transparent focus:outline-none mt-0.5">
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-[#FAF9F6] border border-neutral-200/70">
+                      <div class="flex items-center justify-between">
+                        <label class="text-[10px] text-neutral-500">제안 예산 (만원)</label>
+                        <span id="evidence-budget-badge" class="text-[9px] px-1.5 py-0.2 rounded bg-neutral-200/80 text-neutral-600">미기재</span>
+                      </div>
+                      <input id="parsed-budget" type="number" placeholder="0 (미기재)" class="w-full font-semibold text-[#C85A32] bg-transparent focus:outline-none mt-0.5">
+                      <p id="evidence-budget-text" class="text-[10px] text-neutral-400 truncate mt-0.5">원문 근거: 없음</p>
+                    </div>
+                    <div class="p-2.5 rounded-xl bg-[#FAF9F6] border border-neutral-200/70">
+                      <div class="flex items-center justify-between">
+                        <label class="text-[10px] text-neutral-500">희망 업로드일</label>
+                        <span id="evidence-date-badge" class="text-[9px] px-1.5 py-0.2 rounded bg-neutral-200/80 text-neutral-600">미기재</span>
+                      </div>
+                      <input id="parsed-upload-date" type="date" class="w-full font-semibold text-[#18181B] bg-transparent focus:outline-none mt-0.5">
+                      <p id="evidence-date-text" class="text-[10px] text-neutral-400 truncate mt-0.5">원문 근거: 없음</p>
+                    </div>
+                    <div class="sm:col-span-2 lg:col-span-3 p-2.5 rounded-xl bg-[#FAF9F6] border border-neutral-200/70">
+                      <label class="text-[10px] text-neutral-500 block">2차 활용 및 세부 조건 요약 (원문 기준)</label>
+                      <input id="parsed-secondary" type="text" class="w-full font-medium text-[#18181B] bg-transparent focus:outline-none mt-0.5">
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Card B: Step 2 Team Decision & AI Reply Generator -->
+                <div class="bg-white p-5 rounded-2xl border border-neutral-200/80 shadow-2xs space-y-4">
+                  <div>
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-[#C85A32]">Step 02 · Team Decision & Reply</span>
+                    <h4 class="text-sm font-bold text-[#18181B]">팀 의사결정 선택 후 맞춤형 AI 답장 생성</h4>
+                  </div>
+
+                  <!-- 4 Decision Radio Cards -->
+                  <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs" id="analyzer-decision-grid">
+                    <button type="button" data-decision="proceed_ratecard" onclick="selectAnalyzerDecision('proceed_ratecard')" class="analyzer-dec-btn p-2.5 rounded-xl border-2 border-[#18181B] bg-[#FAF9F6] text-left transition">
+                      <p class="font-bold text-[#18181B]">① 진행 수락 · 단가표 안내</p>
+                      <p class="text-[10px] text-neutral-500 mt-0.5">수락 의사 + 단가표·절차 전달</p>
+                    </button>
+                    <button type="button" data-decision="clarify" onclick="selectAnalyzerDecision('clarify')" class="analyzer-dec-btn p-2.5 rounded-xl border border-neutral-200 bg-white hover:bg-[#FAF9F6] text-left transition">
+                      <p class="font-bold text-[#18181B]">② 자료·조건 추가 문의</p>
+                      <p class="text-[10px] text-neutral-500 mt-0.5">일정·예산·가이드 자료 확인</p>
+                    </button>
+                    <button type="button" data-decision="decline" onclick="selectAnalyzerDecision('decline')" class="analyzer-dec-btn p-2.5 rounded-xl border border-neutral-200 bg-white hover:bg-red-50/40 text-left transition">
+                      <p class="font-bold text-red-700">③ 협업 거절</p>
+                      <p class="text-[10px] text-neutral-500 mt-0.5">정중한 거절 (7일 후 삭제)</p>
+                    </button>
+                    <button type="button" data-decision="custom" onclick="selectAnalyzerDecision('custom')" class="analyzer-dec-btn p-2.5 rounded-xl border border-neutral-200 bg-white hover:bg-[#FAF9F6] text-left transition">
+                      <p class="font-bold text-[#2563EB]">④ 기타 (맥락 맞춤 회신)</p>
+                      <p class="text-[10px] text-neutral-500 mt-0.5">일정 역제안·조율·자유 응대</p>
+                    </button>
+                  </div>
+
+                  <!-- Optional Team Instruction for AI -->
+                  <div class="flex flex-col sm:flex-row gap-2">
+                    <input id="analyzer-team-instruction" type="text" placeholder="AI 답장에 담을 내용 (예: 제안주신 3/23~29 중 3월 26일 업로드로 제안하며 단가표 전달)" class="flex-1 px-3.5 py-2 text-xs bg-[#FAF9F6] border border-neutral-200 rounded-xl focus:outline-none focus:border-[#18181B]">
+                    <button type="button" onclick="generateReplyFromAnalyzerDecision()" class="px-4 py-2 bg-[#C85A32] hover:bg-[#b04d29] text-white text-xs font-semibold rounded-xl shrink-0 transition">
+                      결정 기반 AI 답장 생성
+                    </button>
+                  </div>
+
+                  <!-- Generated Reply Textarea -->
+                  <div id="analyzer-reply-section" class="hidden space-y-2.5 pt-2 border-t border-neutral-100">
+                    <div class="flex flex-wrap items-center justify-between gap-2">
+                      <span class="text-xs font-bold text-[#3D6B5E]">생성된 맞춤형 회신 초안</span>
+                      <div class="flex items-center gap-2">
+                        <button onclick="copyGeneratedReply()" class="px-3 py-1.5 text-xs font-medium bg-[#FAF9F6] hover:bg-neutral-200 border border-neutral-200 rounded-xl text-neutral-800 transition">
+                          답장 복사
+                        </button>
+                        <button onclick="registerAnalyzedDealWithDecision()" class="px-3.5 py-1.5 text-xs font-semibold bg-[#3D6B5E] hover:bg-[#31574c] text-white rounded-xl shadow-2xs transition">
+                          결정 단계로 보드 & 캘린더 등록
+                        </button>
+                      </div>
+                    </div>
+                    <textarea id="ai-reply-output" rows="9" class="w-full p-3.5 text-xs leading-relaxed bg-[#FAF9F6] border border-neutral-200 rounded-xl focus:outline-none focus:border-[#18181B]"></textarea>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- =========================================================
+             VIEW 4: MAGAZINE SETTINGS (AI CONTEXT & SAMPLES)
+             ========================================================= -->
+        <section id="view-settings" class="hidden space-y-6">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            
+            <!-- Left: Magazine Identity & Rate Card -->
+            <div class="lg:col-span-6 space-y-5">
+              <div class="bg-white p-6 rounded-2xl border border-neutral-200/80 shadow-2xs space-y-4">
+                <div class="flex items-center justify-between border-b border-neutral-100 pb-3">
+                  <div>
+                    <h3 class="text-base font-bold text-[#18181B]">매거진 프로필 & 기본 단가 가이드</h3>
+                    <p class="text-xs text-neutral-500 mt-0.5">워크스페이스 전체 팀원에게 동기화되는 AI 기준 정보입니다.</p>
+                  </div>
+                  <button onclick="saveMagazineSettings()" class="px-4 py-2 text-xs font-semibold bg-[#18181B] text-white rounded-xl hover:bg-neutral-800 transition">
+                    클라우드 저장
+                  </button>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-semibold text-neutral-700 mb-1">매거진명 & 한 줄 소개</label>
+                  <input id="set-mag-name" type="text" class="w-full px-3.5 py-2 text-xs bg-[#FAF9F6] border border-neutral-200 rounded-xl focus:outline-none focus:border-[#18181B]">
+                </div>
+
+                <div>
+                  <label class="block text-xs font-semibold text-neutral-700 mb-1">매거진 타깃 오디언스 & 지향점 (톤앤매너 기준)</label>
+                  <textarea id="set-mag-bio" rows="3" class="w-full p-3 text-xs leading-relaxed bg-[#FAF9F6] border border-neutral-200 rounded-xl focus:outline-none focus:border-[#18181B]"></textarea>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-semibold text-neutral-700 mb-1">기본 협업 단가표 & 2차 활용 정책</label>
+                  <textarea id="set-rate-card" rows="6" class="w-full p-3 text-xs leading-relaxed bg-[#FAF9F6] border border-neutral-200 rounded-xl focus:outline-none focus:border-[#18181B]"></textarea>
+                </div>
+
+                <div>
+                  <label class="block text-xs font-semibold text-neutral-700 mb-1">공식 이메일 서명 (Signature)</label>
+                  <textarea id="set-signature" rows="3" class="w-full p-3 text-xs leading-relaxed bg-[#FAF9F6] border border-neutral-200 rounded-xl focus:outline-none focus:border-[#18181B]"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Past Reply Samples for AI Few-Shot Learning -->
+            <div class="lg:col-span-6 space-y-5">
+              <div class="bg-white p-6 rounded-2xl border border-neutral-200/80 shadow-2xs space-y-4">
+                <div class="flex items-center justify-between border-b border-neutral-100 pb-3">
+                  <div>
+                    <h3 class="text-base font-bold text-[#18181B]">실제 회신 메일/DM 샘플 라이브러리</h3>
+                    <p class="text-xs text-neutral-500 mt-0.5">기존에 보냈던 좋은 답변 샘플을 등록하면 AI가 문체와 구조를 그대로 학습합니다.</p>
+                  </div>
+                  <button onclick="openAddSampleModal()" class="px-3 py-1.5 text-xs font-semibold bg-[#C85A32] text-white rounded-xl hover:bg-[#b04d29] transition">
+                    + 샘플 추가
+                  </button>
+                </div>
+
+                <div id="reply-samples-list" class="space-y-3 max-h-[540px] overflow-y-auto pr-1">
+                  <!-- Sample cards injected via JS -->
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- =========================================================
+       MODAL 1: CUMULATIVE COLLABORATION WORKSPACE (THREAD + TRACKER)
+       ========================================================= -->
+  <div id="deal-detail-modal" class="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 hidden items-center justify-center p-3 sm:p-5">
+    <div class="bg-white w-full max-w-6xl max-h-[94vh] rounded-2xl shadow-2xl border border-neutral-200 flex flex-col overflow-hidden">
+      <!-- Modal Header -->
+      <div class="px-5 sm:px-6 py-4 border-b border-neutral-200 flex flex-wrap items-center justify-between gap-3 bg-[#FAF9F6]">
+        <div class="flex items-center gap-3 min-w-0">
+          <span id="modal-deal-category" class="px-2.5 py-1 text-[11px] font-semibold rounded-full bg-[#18181B] text-white shrink-0">카테고리</span>
+          <div class="min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <h3 id="modal-deal-title" class="text-base font-bold text-[#18181B] truncate">브랜드명 — 캠페인명</h3>
+              <span id="modal-declined-countdown" class="hidden px-2 py-0.5 text-[10px] font-bold rounded bg-red-100 text-red-700 border border-red-200 shrink-0">D-7 후 자동 삭제</span>
+            </div>
+            <p id="modal-deal-creator" class="text-[11px] text-neutral-500 mt-0.5">최초 등록자: ---</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="deleteCurrentDeal()" class="px-2.5 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50 rounded-lg transition">영구 삭제</button>
+          <button onclick="closeDealModal()" class="p-1.5 text-neutral-500 hover:text-black rounded-lg">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Persistent Top Status Bar (Stage + Granular Sub-Status + Assignee + Settlement) -->
+      <div class="px-5 sm:px-6 py-3 bg-white border-b border-neutral-200/80 grid grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1">큰 파이프라인 단계</label>
+          <select id="edit-deal-stage" onchange="handleStageDropdownChange(this.value)" class="w-full px-3 py-1.5 text-xs font-bold bg-[#FAF9F6] border border-neutral-200 rounded-xl text-[#18181B]">
+            <option value="문의 접수">문의 접수</option>
+            <option value="단가표 전달 / 협의">단가표 전달 / 협의</option>
+            <option value="기획/제작 중">기획/제작 중</option>
+            <option value="컨펌 대기">컨펌 대기</option>
+            <option value="업로드 / 정산 완료">업로드 / 정산 완료</option>
+            <option value="거절됨">거절됨 (7일 후 자동삭제)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-[#C85A32] mb-1">현재 세부 실무 상태 (트래킹)</label>
+          <select id="edit-deal-substatus" onchange="updateDealField('subStatus', this.value)" class="w-full px-3 py-1.5 text-xs font-bold bg-[#FFF8F5] border border-[#C85A32]/40 rounded-xl text-[#C85A32]">
+            <option value="신규 문의 검토 중">신규 문의 검토 중</option>
+            <option value="단가표/소개서 회신 완료 (답변 대기)">단가표/소개서 회신 완료 (답변 대기)</option>
+            <option value="세부 조건/일정 조율 중">세부 조건/일정 조율 중</option>
+            <option value="브랜드 측 자료·제품 수령 대기">브랜드 측 자료·제품 수령 대기</option>
+            <option value="기획안/콘티 작성 중">기획안/콘티 작성 중</option>
+            <option value="게시글/릴스 원고 제작 중">게시글/릴스 원고 제작 중</option>
+            <option value="1차 시안 브랜드 컨펌 대기">1차 시안 브랜드 컨펌 대기</option>
+            <option value="피드백 수정 반영 중">피드백 수정 반영 중</option>
+            <option value="최종 업로드 예약 완료">최종 업로드 예약 완료</option>
+            <option value="발행 완료 / 인사이트·정산 진행">발행 완료 / 인사이트·정산 진행</option>
+            <option value="협업 거절 회신 완료">협업 거절 회신 완료</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1">담당 에디터</label>
+          <select id="edit-deal-editor" onchange="updateDealField('editor', this.value)" class="w-full px-3 py-1.5 text-xs font-semibold bg-[#FAF9F6] border border-neutral-200 rounded-xl">
+          </select>
+        </div>
+        <div>
+          <label class="block text-[10px] font-bold uppercase tracking-wider text-neutral-400 mb-1">정산 상태</label>
+          <select id="edit-deal-settlement" onchange="updateDealField('settlement', this.value)" class="w-full px-3 py-1.5 text-xs font-semibold bg-[#FAF9F6] border border-neutral-200 rounded-xl">
+            <option value="미청구">미청구</option>
+            <option value="계산서 발행">계산서 발행</option>
+            <option value="입금 완료">입금 완료</option>
+            <option value="바터(제품협찬)">바터(제품협찬)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Modal Body: Left 7 Cols (Cumulative Mail Thread + Next Reply Composer) | Right 5 Cols (Specs, Checklist & Internal Team Chat) -->
+      <div class="flex-1 overflow-y-auto p-5 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- LEFT 7 COLS: CUMULATIVE MAIL/DM TIMELINE + CONTINUOUS REPLY COMPOSER -->
+        <div class="lg:col-span-7 flex flex-col space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-widest text-[#3D6B5E]">Cumulative Communication Log</span>
+              <h4 class="text-sm font-bold text-[#18181B]">누적 메일·DM 왕복 히스토리 (<span id="modal-thread-count">0</span>건)</h4>
+            </div>
+            <button type="button" onclick="toggleFollowupIntakeBox()" class="px-3 py-1.5 text-xs font-semibold bg-[#18181B] hover:bg-neutral-800 text-white rounded-xl shadow-2xs transition">
+              + 브랜드 후속 메일/DM 추가
+            </button>
+          </div>
+
+          <!-- New Incoming Follow-up Mail Box (Collapsible) -->
+          <div id="followup-intake-box" class="hidden p-4 rounded-2xl bg-blue-50/60 border border-blue-200 space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-bold text-blue-950">브랜드로부터 새로 도착한 후속 메일/DM 기록하기</span>
+              <button type="button" onclick="toggleFollowupIntakeBox(false)" class="text-xs text-neutral-500 hover:text-black">닫기 ✕</button>
+            </div>
+            <textarea id="followup-mail-input" rows="4" placeholder="브랜드 담당자에게 새로 받은 답장 메일이나 DM 내용을 붙여넣으세요. (예: 단가표 확인했습니다. 220만원으로 진행 희망하며 가이드라인과 제품 발송 일정 공유드립니다...)" class="w-full p-3 text-xs bg-white border border-blue-200 rounded-xl focus:outline-none focus:border-blue-600 leading-relaxed"></textarea>
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-[11px] text-blue-800">저장하면 타임라인에 누적되며, 바로 다음 AI 답장을 쓸 수 있습니다.</span>
+              <button type="button" onclick="appendIncomingBrandMessage()" class="px-3.5 py-1.5 text-xs font-semibold bg-[#2563EB] hover:bg-blue-700 text-white rounded-xl shrink-0">
+                수신 내역에 누적 저장
+              </button>
+            </div>
+          </div>
+
+          <!-- Scrollable Cumulative Mail Timeline -->
+          <div id="modal-mail-timeline" class="space-y-3 max-h-[340px] overflow-y-auto pr-1 p-3.5 rounded-2xl bg-[#FAF9F6] border border-neutral-200/80">
+            <!-- Cumulative inbound & outbound messages injected here -->
+          </div>
+
+          <!-- Next Action / AI Reply Composer (Reads Full Thread Context) -->
+          <div class="p-4 rounded-2xl bg-[#FFF8F5] border border-[#C85A32]/30 space-y-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <span class="text-[10px] font-bold uppercase tracking-wider text-[#C85A32]">Next Reply & Decision Composer</span>
+                <h4 class="text-xs font-bold text-[#18181B]">위 누적 대화를 바탕으로 다음 답장 방향 선택 & AI 초안 생성</h4>
+              </div>
+              <span id="modal-decision-badge" class="px-2 py-0.5 text-[10px] font-semibold rounded bg-white border border-neutral-200 text-neutral-700">진행 중</span>
+            </div>
+
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
+              <button type="button" data-mdecision="proceed_ratecard" onclick="selectModalDecision('proceed_ratecard')" class="modal-dec-btn p-2 rounded-xl border-2 border-[#18181B] bg-[#FAF9F6] text-left transition">
+                <p class="font-bold text-[#18181B]">① 진행 수락·단가안내</p>
+                <p class="text-[10px] text-neutral-500">수락 및 단가·절차 회신</p>
+              </button>
+              <button type="button" data-mdecision="clarify" onclick="selectModalDecision('clarify')" class="modal-dec-btn p-2 rounded-xl border border-neutral-200 bg-white hover:bg-[#FAF9F6] text-left transition">
+                <p class="font-bold text-[#18181B]">② 자료·조건 요청</p>
+                <p class="text-[10px] text-neutral-500">제품·브랜드자료·일정 확인</p>
+              </button>
+              <button type="button" data-mdecision="decline" onclick="selectModalDecision('decline')" class="modal-dec-btn p-2 rounded-xl border border-neutral-200 bg-white hover:bg-red-50 text-left transition">
+                <p class="font-bold text-red-700">③ 협업 거절</p>
+                <p class="text-[10px] text-neutral-500">정중히 거절 (7일후 삭제)</p>
+              </button>
+              <button type="button" data-mdecision="custom" onclick="selectModalDecision('custom')" class="modal-dec-btn p-2 rounded-xl border border-neutral-200 bg-white hover:bg-[#FAF9F6] text-left transition">
+                <p class="font-bold text-[#2563EB]">④ 기타 (맥락 맞춤)</p>
+                <p class="text-[10px] text-neutral-500">날짜확정·시안·수정·자유응대</p>
+              </button>
+            </div>
+
+            <div class="flex flex-col sm:flex-row gap-2">
+              <input id="modal-ai-instruction" type="text" placeholder="이번 회신 핵심 내용 (예: 제안주신 기간 중 3월 26일 업로드로 확정 안내 및 가이드라인 요청)" class="flex-1 px-3 py-2 text-xs bg-white border border-neutral-200 rounded-xl focus:outline-none focus:border-[#18181B]">
+              <button id="btn-modal-generate-reply" type="button" onclick="generateContextualReplyInModal()" class="px-3.5 py-2 bg-[#18181B] hover:bg-neutral-800 text-white text-xs font-semibold rounded-xl shrink-0 transition">
+                누적 맥락 반영 AI 답장 쓰기
+              </button>
+            </div>
+
+            <!-- Draft Reply Editor & Archive to Thread Button -->
+            <div id="modal-ai-reply-wrap" class="hidden space-y-2 pt-2 border-t border-[#C85A32]/15">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <span class="text-[11px] font-bold text-[#3D6B5E]">생성된 회신 초안 (수정 후 복사 및 발송 기록 누적)</span>
+                <div class="flex items-center gap-1.5">
+                  <button type="button" onclick="copyModalReply()" class="px-2.5 py-1 text-[11px] font-semibold bg-white border border-neutral-200 hover:bg-neutral-50 rounded-lg text-[#18181B]">
+                    초안 복사
+                  </button>
+                  <button type="button" onclick="commitDraftReplyToThread()" class="px-3 py-1 text-[11px] font-semibold bg-[#3D6B5E] hover:bg-[#31574c] text-white rounded-lg shadow-2xs">
+                    복사 및 발송 완료로 타임라인에 누적 ✓
+                  </button>
+                </div>
+              </div>
+              <textarea id="modal-ai-reply" rows="5" class="w-full p-3 rounded-xl bg-white border border-neutral-200 text-xs text-neutral-800 leading-relaxed focus:outline-none"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT 5 COLS: RIGHT SUB-TABS (SPECS/CHECKLIST vs TEAM INTERNAL DISCUSSION) -->
+        <div class="lg:col-span-5 flex flex-col bg-[#FAF9F6] rounded-2xl border border-neutral-200/80 overflow-hidden min-h-[480px]">
+          <!-- Right Panel Sub-Tab Switcher -->
+          <div class="p-2 bg-neutral-100/80 border-b border-neutral-200/80 grid grid-cols-2 gap-1.5">
+            <button id="right-tab-workflow" onclick="switchModalRightTab('workflow')" class="py-2 text-xs font-bold rounded-xl bg-white text-[#18181B] shadow-2xs transition">
+              제작 공정 · 조건 · 일정
+            </button>
+            <button id="right-tab-comments" onclick="switchModalRightTab('comments')" class="py-2 text-xs font-medium rounded-xl text-neutral-500 hover:text-[#18181B] transition">
+              팀 내부 논의 (<span id="modal-comments-badge">0</span>)
+            </button>
+          </div>
+
+          <!-- Sub-View A: Editorial Production Checklist & Deal Terms -->
+          <div id="modal-right-workflow-view" class="p-4 flex-1 overflow-y-auto space-y-4">
+            <!-- Production Checklist -->
+            <div class="p-3.5 rounded-xl bg-white border border-neutral-200/80 space-y-2.5">
+              <div class="flex items-center justify-between">
+                <h4 class="text-xs font-bold text-[#18181B]">협업 진행 체크리스트</h4>
+                <span id="checklist-progress" class="text-[11px] font-semibold text-[#3D6B5E]">0/0 완료</span>
+              </div>
+              <div id="modal-checklist" class="space-y-1">
+              </div>
+              <div class="flex gap-1.5 pt-1">
+                <input id="new-checklist-input" type="text" placeholder="할 일 추가 (예: 브랜드 로고/제품 누끼 수령)" onkeydown="if(event.key==='Enter') addChecklistItem()" class="flex-1 px-2.5 py-1.5 text-xs bg-[#FAF9F6] border border-neutral-200 rounded-lg focus:outline-none">
+                <button onclick="addChecklistItem()" class="px-3 py-1.5 text-xs font-semibold bg-neutral-900 text-white rounded-lg">추가</button>
+              </div>
+            </div>
+
+            <!-- Deal Specs & Dates (Synced to Calendar) -->
+            <div class="p-3.5 rounded-xl bg-white border border-neutral-200/80 space-y-2.5 text-xs">
+              <div class="flex items-center justify-between gap-2">
+                <h4 class="font-bold text-[#18181B]">협업 조건 & 캘린더 일정</h4>
+                <button type="button" id="btn-resync-thread-specs" onclick="syncDealSpecsFromFullThread(true)" class="px-2 py-0.5 text-[10px] font-semibold bg-[#FAF9F6] hover:bg-neutral-200/70 border border-neutral-200 rounded-md text-[#3D6B5E] transition">
+                  ↻ 누적 대화에서 조건 재추출
+                </button>
+              </div>
+              <div class="grid grid-cols-2 gap-2.5">
+                <div>
+                  <label class="text-[10px] text-neutral-500 block">콘텐츠 유형</label>
+                  <input id="edit-deal-contentType" type="text" placeholder="미기재" onchange="updateDealField('contentType', this.value)" class="w-full mt-0.5 px-2.5 py-1.5 bg-[#FAF9F6] border border-neutral-200 rounded-lg font-medium">
+                </div>
+                <div>
+                  <label class="text-[10px] text-neutral-500 block">협의 단가 (만원, 0=미기재)</label>
+                  <input id="edit-deal-budget" type="number" onchange="updateDealField('budget', Number(this.value))" class="w-full mt-0.5 px-2.5 py-1.5 bg-[#FAF9F6] border border-neutral-200 rounded-lg font-bold text-[#C85A32]">
+                </div>
+                <div>
+                  <label class="text-[10px] text-neutral-500 block">초안 전달 마감일</label>
+                  <input id="edit-deal-draftDate" type="date" onchange="updateDealField('draftDate', this.value)" class="w-full mt-0.5 px-2 py-1.5 bg-[#FAF9F6] border border-neutral-200 rounded-lg">
+                </div>
+                <div>
+                  <label class="text-[10px] text-neutral-500 block">최종 업로드일</label>
+                  <input id="edit-deal-uploadDate" type="date" onchange="updateDealField('uploadDate', this.value)" class="w-full mt-0.5 px-2 py-1.5 bg-[#FAF9F6] border border-neutral-200 rounded-lg">
+                </div>
+                <div>
+                  <label class="text-[10px] text-neutral-500 block">2차 광고 종료일</label>
+                  <input id="edit-deal-adEndDate" type="date" onchange="updateDealField('adEndDate', this.value)" class="w-full mt-0.5 px-2 py-1.5 bg-[#FAF9F6] border border-neutral-200 rounded-lg">
+                </div>
+                <div>
+                  <label class="text-[10px] text-neutral-500 block">2차 활용 조건</label>
+                  <input id="edit-deal-secondary" type="text" placeholder="미기재" onchange="updateDealField('secondaryUsage', this.value)" class="w-full mt-0.5 px-2 py-1.5 bg-[#FAF9F6] border border-neutral-200 rounded-lg">
+                </div>
+              </div>
+              <div class="pt-1 text-[10px] text-neutral-400 flex justify-between">
+                <span id="modal-budget-evidence-tag"></span>
+                <span id="modal-date-evidence-tag"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sub-View B: Team Internal Discussion Thread -->
+          <div id="modal-right-comments-view" class="hidden p-4 flex-1 flex flex-col justify-between overflow-hidden">
+            <div id="modal-comments-list" class="flex-1 overflow-y-auto space-y-2.5 pr-1">
+            </div>
+
+            <div class="pt-3 mt-2 border-t border-neutral-200/80">
+              <div class="flex gap-2">
+                <input id="new-comment-input" type="text" placeholder="팀원에게 내부 메모 남기기..." onkeydown="if(event.key==='Enter') addDealComment()" class="flex-1 px-3 py-2 text-xs bg-white border border-neutral-200 rounded-xl focus:outline-none focus:border-[#18181B]">
+                <button onclick="addDealComment()" class="px-3.5 py-2 text-xs font-semibold bg-[#18181B] text-white rounded-xl hover:bg-neutral-800">전송</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       MODAL 2: NOTION-STYLE WORKSPACE SWITCHER, INVITE & MEMBERS
+       ========================================================= -->
+  <div id="workspace-modal" class="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+    <div class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl border border-neutral-200 overflow-hidden flex flex-col max-h-[90vh]">
+      <div class="px-6 py-4 border-b border-neutral-200 flex items-center justify-between bg-[#FAF9F6]">
+        <div>
+          <h3 class="text-base font-bold text-[#18181B]">워크스페이스 관리 & 팀원 초대</h3>
+          <p class="text-[11px] text-neutral-500">팀원들과 동일한 초대 코드를 공유하면 같은 협업 보드를 실시간으로 공유합니다.</p>
+        </div>
+        <button onclick="closeWorkspaceModal()" class="text-neutral-400 hover:text-black p-1">✕</button>
+      </div>
+
+      <div class="p-6 overflow-y-auto space-y-6 text-xs">
+        <!-- Current Workspace Invite Banner -->
+        <div class="p-4 rounded-2xl bg-[#18181B] text-white flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <span class="text-[10px] uppercase tracking-widest text-[#F4A261] font-bold">Current Workspace</span>
+            <h4 id="modal-ws-name" class="text-base font-bold mt-0.5">매거진 워크스페이스</h4>
+            <p class="text-[11px] text-neutral-300 mt-1">초대 코드: <span id="modal-ws-code" class="font-mono font-bold text-white bg-white/15 px-2 py-0.5 rounded">---</span></p>
+          </div>
+          <button onclick="copyWorkspaceInviteCode()" class="px-4 py-2 bg-white text-[#18181B] hover:bg-neutral-100 font-bold rounded-xl shrink-0 transition">
+            초대 코드 복사하기
+          </button>
+        </div>
+
+        <!-- Active Members List -->
+        <div>
+          <h4 class="font-bold text-[#18181B] mb-2.5">참여 중인 팀원 목록 (<span id="modal-members-count">0</span>명)</h4>
+          <div id="modal-members-list" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+            <!-- Member cards injected via JS -->
+          </div>
+        </div>
+
+        <!-- Switch / Join or Create Workspace -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-neutral-200">
+          <!-- Join Existing Workspace -->
+          <div class="p-4 rounded-2xl bg-[#FAF9F6] border border-neutral-200 space-y-2.5">
+            <h5 class="font-bold text-[#18181B]">다른 팀 워크스페이스 합류하기</h5>
+            <p class="text-[11px] text-neutral-500">동료가 공유한 워크스페이스 초대 코드를 입력하세요.</p>
+            <input id="join-ws-code-input" type="text" placeholder="예: WS-84920" class="w-full px-3 py-2 bg-white border border-neutral-200 rounded-xl font-mono uppercase">
+            <button onclick="handleJoinWorkspace()" class="w-full py-2 bg-[#2563EB] hover:bg-blue-700 text-white font-semibold rounded-xl transition">
+              초대 코드로 합류
+            </button>
+          </div>
+
+          <!-- Create New Workspace -->
+          <div class="p-4 rounded-2xl bg-[#FAF9F6] border border-neutral-200 space-y-2.5">
+            <h5 class="font-bold text-[#18181B]">새 매거진 워크스페이스 생성</h5>
+            <p class="text-[11px] text-neutral-500">새로운 매거진 채널 또는 프로젝트 공간을 만듭니다.</p>
+            <input id="create-ws-name-input" type="text" placeholder="예: MONOLITH SEOUL 2팀" class="w-full px-3 py-2 bg-white border border-neutral-200 rounded-xl">
+            <button onclick="handleCreateNewWorkspace()" class="w-full py-2 bg-[#18181B] hover:bg-neutral-800 text-white font-semibold rounded-xl transition">
+              새 워크스페이스 만들기
+            </button>
+          </div>
+        </div>
+
+        <!-- My Joined Workspaces Quick Switcher -->
+        <div id="my-workspaces-section" class="pt-2">
+          <h4 class="font-bold text-[#18181B] mb-2">내가 참여 중인 워크스페이스 빠른 전환</h4>
+          <div id="my-workspaces-list" class="flex flex-wrap gap-2">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       MODAL 3: MANUAL NEW DEAL REGISTRATION
+       ========================================================= -->
+  <div id="new-deal-modal" class="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+    <div class="bg-white w-full max-w-lg rounded-2xl shadow-xl border border-neutral-200 p-6 space-y-4">
+      <div class="flex items-center justify-between border-b border-neutral-100 pb-3">
+        <h3 class="text-base font-bold text-[#18181B]">새 브랜드 협업 건 수동 등록</h3>
+        <button onclick="closeNewDealModal()" class="text-neutral-400 hover:text-black">✕</button>
+      </div>
+      <div class="grid grid-cols-2 gap-3 text-xs">
+        <div>
+          <label class="block font-semibold text-neutral-600 mb-1">브랜드명 *</label>
+          <input id="nd-brand" type="text" placeholder="예: 논픽션" class="w-full px-3 py-2 bg-[#FAF9F6] border border-neutral-200 rounded-xl">
+        </div>
+        <div>
+          <label class="block font-semibold text-neutral-600 mb-1">카테고리</label>
+          <select id="nd-category" class="w-full px-3 py-2 bg-[#FAF9F6] border border-neutral-200 rounded-xl">
+            <option value="패션/뷰티">패션/뷰티</option>
+            <option value="라이프스타일">라이프스타일</option>
+            <option value="F&B">F&B</option>
+            <option value="문화/전시">문화/전시</option>
+            <option value="IT/테크">IT/테크</option>
+          </select>
+        </div>
+        <div class="col-span-2">
+          <label class="block font-semibold text-neutral-600 mb-1">캠페인 / 제품명 *</label>
+          <input id="nd-campaign" type="text" placeholder="예: 홀리데이 핸드크림 기프트 컬렉션 릴스" class="w-full px-3 py-2 bg-[#FAF9F6] border border-neutral-200 rounded-xl">
+        </div>
+        <div>
+          <label class="block font-semibold text-neutral-600 mb-1">콘텐츠 유형</label>
+          <input id="nd-contentType" type="text" placeholder="미기재" class="w-full px-3 py-2 bg-[#FAF9F6] border border-neutral-200 rounded-xl">
+        </div>
+        <div>
+          <label class="block font-semibold text-neutral-600 mb-1">협업 금액 (만원, 0=미기재)</label>
+          <input id="nd-budget" type="number" value="0" class="w-full px-3 py-2 bg-[#FAF9F6] border border-neutral-200 rounded-xl">
+        </div>
+        <div>
+          <label class="block font-semibold text-neutral-600 mb-1">초안 마감일 (선택)</label>
+          <input id="nd-draftDate" type="date" class="w-full px-3 py-2 bg-[#FAF9F6] border border-neutral-200 rounded-xl">
+        </div>
+        <div>
+          <label class="block font-semibold text-neutral-600 mb-1">최종 업로드일 (선택)</label>
+          <input id="nd-uploadDate" type="date" class="w-full px-3 py-2 bg-[#FAF9F6] border border-neutral-200 rounded-xl">
+        </div>
+        <div class="col-span-2">
+          <label class="block font-semibold text-neutral-600 mb-1">담당 에디터</label>
+          <select id="nd-editor" class="w-full px-3 py-2 bg-[#FAF9F6] border border-neutral-200 rounded-xl">
+          </select>
+        </div>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeNewDealModal()" class="px-4 py-2 text-xs font-medium text-neutral-600 hover:bg-neutral-100 rounded-xl">취소</button>
+        <button onclick="submitNewDeal()" class="px-4 py-2 text-xs font-semibold bg-[#18181B] text-white rounded-xl">영구 등록하기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       MODAL 4: ADD REPLY SAMPLE MODAL
+       ========================================================= -->
+  <div id="add-sample-modal" class="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+    <div class="bg-white w-full max-w-lg rounded-2xl shadow-xl border border-neutral-200 p-6 space-y-4">
+      <div class="flex items-center justify-between border-b border-neutral-100 pb-3">
+        <h3 class="text-base font-bold text-[#18181B]">새 회신 샘플 등록 (AI 톤앤매너 학습용)</h3>
+        <button onclick="closeAddSampleModal()" class="text-neutral-400 hover:text-black">✕</button>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-neutral-600 mb-1">상황 / 제목</label>
+          <input id="sample-title" type="text" placeholder="예: 릴스 단가 안내 및 2차 활용 조건 조율 회신" class="w-full px-3 py-2 bg-[#FAF9F6] border border-neutral-200 rounded-xl">
+        </div>
+        <div>
+          <label class="block font-semibold text-neutral-600 mb-1">실제 발송했던 답장 본문</label>
+          <textarea id="sample-body" rows="7" placeholder="실제 브랜드 측에 보냈던 메일이나 DM 텍스트를 붙여넣으세요..." class="w-full p-3 bg-[#FAF9F6] border border-neutral-200 rounded-xl leading-relaxed"></textarea>
+        </div>
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeAddSampleModal()" class="px-4 py-2 text-xs font-medium text-neutral-600 hover:bg-neutral-100 rounded-xl">취소</button>
+        <button onclick="submitNewSample()" class="px-4 py-2 text-xs font-semibold bg-[#18181B] text-white rounded-xl">샘플 저장</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================
+       MODAL 5: EXTERNAL HOSTING CLOUD & GEMINI API CONFIG MODAL
+       ========================================================= -->
+  <div id="external-config-modal" class="fixed inset-0 bg-black/50 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+    <div class="bg-white w-full max-w-lg rounded-2xl shadow-2xl border border-neutral-200 p-6 space-y-4 text-xs">
+      <div class="flex items-center justify-between border-b border-neutral-100 pb-3">
+        <div>
+          <h3 class="text-base font-bold text-[#18181B]">외부 배포용 클라우드 & AI 키 설정</h3>
+          <p class="text-[11px] text-neutral-500 mt-0.5">현재 로컬 브라우저 저장 모드로 실행 중이라면, 아래 키를 입력해 팀원 실시간 공유를 활성화할 수 있습니다.</p>
+        </div>
+        <button onclick="closeExternalConfigModal()" class="text-neutral-400 hover:text-black p-1">✕</button>
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <label class="block font-semibold text-neutral-700 mb-1">1. Google AI Studio Gemini API 키 (선택)</label>
+          <input id="ext-gemini-key" type="password" placeholder="AIzaSy... (입력 시 외부 브라우저에서도 AI 답장 생성 작동)" class="w-full px-3 py-2 bg-[#FAF9F6] border border-neutral-200 rounded-xl font-mono">
+        </div>
+        <div>
+          <label class="block font-semibold text-neutral-700 mb-1">2. 무료 Firebase Config JSON (선택 · 팀원 실시간 공유용)</label>
+          <textarea id="ext-firebase-config" rows="5" placeholder='{"apiKey":"...","authDomain":"...","projectId":"..."}' class="w-full p-3 bg-[#FAF9F6] border border-neutral-200 rounded-xl font-mono text-[11px]"></textarea>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between pt-2">
+        <button type="button" onclick="clearExternalConfig()" class="px-3 py-2 text-neutral-500 hover:text-red-600 font-medium">설정 초기화 (로컬 모드)</button>
+        <div class="flex gap-2">
+          <button type="button" onclick="closeExternalConfigModal()" class="px-4 py-2 font-medium text-neutral-600 hover:bg-neutral-100 rounded-xl">닫기</button>
+          <button type="button" onclick="saveExternalConfig()" class="px-4 py-2 font-semibold bg-[#18181B] text-white rounded-xl">저장 후 적용</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-[#18181B] text-white px-4 py-3 rounded-xl shadow-lg text-xs font-medium flex items-center gap-2.5">
+    <span class="w-2 h-2 rounded-full bg-[#F4A261]"></span>
+    <span id="toast-message">알림 메시지</span>
+  </div>
+
+  <!-- =========================================================
+       APPLICATION SCRIPT (FIREBASE AUTH + FIRESTORE PERSISTENCE + GEMINI)
+       ========================================================= -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      signInAnonymously,
+      signInWithCustomToken,
+      onAuthStateChanged,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import {
+      getFirestore,
+      doc,
+      getDoc,
+      setDoc,
+      updateDoc,
+      deleteDoc,
+      onSnapshot,
+      collection
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    // ---------------------------------------------------------
+    // 1. FIREBASE INITIALIZATION & GLOBAL STATE
+    // ---------------------------------------------------------
+    let app = null;
+    let auth = null;
+    let db = null;
+    let isLocalStandaloneMode = false;
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'atelier-desk-default';
+    const LOCAL_DB_KEY = 'atelier_desk_standalone_db_v1';
+
+    let unsubWorkspace = null;
+    let unsubDeals = null;
+    let unsubMembers = null;
+
+    const STAGES = [
+      '문의 접수',
+      '단가표 전달 / 협의',
+      '기획/제작 중',
+      '컨펌 대기',
+      '업로드 / 정산 완료',
+      '거절됨'
+    ];
+
+    const DEFAULT_SETTINGS = {
+      magName: 'ATELIER SEOUL (@atelier.seoul_mag)',
+      magBio: '서울의 감각적인 디자인, 건축, 라이프스타일, F&B 씬을 큐레이션하는 인디 디지털 매거진입니다. 2539 고감도 크리에이티브 오디언스를 보유하고 있습니다.',
+      rateCard: '• 인스타그램 릴스 단독 (60초 내외): 220만원\n• 피드 캐러셀 (화보형 5~8컷): 150만원\n• 릴스 + 피드 패키지: 320만원\n• 2차 저작물 활용 (브랜드 자사몰/SNS 리그램 1개월): 무료 제공 / 메타 파트너십 광고 30일 집행 시 +50만원',
+      signature: '감사합니다.\nATELIER SEOUL 파트너십 팀 드림\nE. partnership@atelier-seoul.kr | IG. @atelier.seoul_mag',
+      samples: [
+        {
+          id: 'smp-1',
+          title: '단가표 및 미디어킷 선전달 회신 예시',
+          body: '안녕하세요, 담당자님.\n감각적인 큐레이션 매거진 ATELIER SEOUL 파트너십 팀입니다.\n\n보내주신 브랜드 협업 제안 감사히 확인했습니다. 저희 매거진의 타깃 독자층과 브랜드 무드가 잘 어우러질 것으로 기대됩니다.\n\n요청하신 협업 진행 단가 및 미디어킷 요약본을 아래와 같이 공유드립니다. 검토 후 희망하시는 콘텐츠 포맷과 예상 일정을 회신해 주시면 상세 기획안으로 안내드리겠습니다.'
+        }
+      ]
+    };
+
+    const state = {
+      user: null,
+      workspaceId: null,
+      workspaceName: '',
+      members: [],
+      deals: [],
+      settings: JSON.parse(JSON.stringify(DEFAULT_SETTINGS)),
+      pipelineMode: 'kanban',
+      selectedDealId: null,
+      analyzerDecision: 'proceed_ratecard',
+      modalDecision: 'proceed_ratecard',
+      calendarYear: 2026,
+      calendarMonth: 10 // November (0-indexed)
+    };
+
+    function getLocalStore() {
+      try {
+        const raw = localStorage.getItem(LOCAL_DB_KEY);
+        if (raw) return JSON.parse(raw);
+      } catch (e) {}
+      return { users: {}, workspaces: {}, currentUid: null };
+    }
+
+    function saveLocalStore(store) {
+      try {
+        localStorage.setItem(LOCAL_DB_KEY, JSON.stringify(store));
+      } catch (e) {}
+    }
+
+    function getActiveGeminiApiKey() {
+      return localStorage.getItem('atelier_ext_gemini_key') || '';
+    }
+
+    window.openExternalConfigModal = function() {
+      document.getElementById('ext-gemini-key').value = localStorage.getItem('atelier_ext_gemini_key') || '';
+      document.getElementById('ext-firebase-config').value = localStorage.getItem('atelier_ext_firebase_config') || '';
+      const modal = document.getElementById('external-config-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    };
+
+    window.closeExternalConfigModal = function() {
+      const modal = document.getElementById('external-config-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    };
+
+    window.saveExternalConfig = function() {
+      const gKey = document.getElementById('ext-gemini-key').value.trim();
+      const fbStr = document.getElementById('ext-firebase-config').value.trim();
+      if (gKey) localStorage.setItem('atelier_ext_gemini_key', gKey);
+      else localStorage.removeItem('atelier_ext_gemini_key');
+
+      if (fbStr) {
+        try {
+          JSON.parse(fbStr);
+          localStorage.setItem('atelier_ext_firebase_config', fbStr);
+        } catch (e) {
+          showToast('Firebase Config가 올바른 JSON 형식이 아닙니다.');
+          return;
+        }
+      } else {
+        localStorage.removeItem('atelier_ext_firebase_config');
+      }
+      showToast('설정이 저장되었습니다. 페이지를 새로고침하여 적용합니다.');
+      setTimeout(() => location.reload(), 800);
+    };
+
+    window.clearExternalConfig = function() {
+      localStorage.removeItem('atelier_ext_gemini_key');
+      localStorage.removeItem('atelier_ext_firebase_config');
+      showToast('외부 키 설정이 초기화되었습니다. 로컬 저장 모드로 전환됩니다.');
+      setTimeout(() => location.reload(), 800);
+    };
+
+    function initFirebase() {
+      try {
+        let rawConfig = null;
+        if (typeof __firebase_config !== 'undefined' && __firebase_config) {
+          rawConfig = __firebase_config;
+        } else if (localStorage.getItem('atelier_ext_firebase_config')) {
+          rawConfig = localStorage.getItem('atelier_ext_firebase_config');
+        }
+
+        if (!rawConfig) {
+          // Automatically fall back to standalone localStorage mode when exported!
+          isLocalStandaloneMode = true;
+          return true;
+        }
+
+        const firebaseConfig = typeof rawConfig === 'string'
+          ? JSON.parse(rawConfig)
+          : rawConfig;
+        app = initializeApp(firebaseConfig);
+        auth = getAuth(app);
+        db = getFirestore(app);
+        isLocalStandaloneMode = false;
+        return true;
+      } catch (err) {
+        console.warn('Switching to standalone localStorage mode:', err);
+        isLocalStandaloneMode = true;
+        return true;
+      }
+    }
+
+    // ---------------------------------------------------------
+    // 2. AUTHENTICATION (LOGIN / SIGNUP / DEMO / LOGOUT)
+    // ---------------------------------------------------------
+    window.switchAuthTab = function(mode) {
+      const loginForm = document.getElementById('login-form');
+      const signupForm = document.getElementById('signup-form');
+      const loginBtn = document.getElementById('tab-login-btn');
+      const signupBtn = document.getElementById('tab-signup-btn');
+      if (mode === 'login') {
+        loginForm.classList.remove('hidden');
+        signupForm.classList.add('hidden');
+        loginBtn.className = 'flex-1 py-2 text-xs font-bold rounded-lg bg-white text-[#18181B] shadow-2xs transition';
+        signupBtn.className = 'flex-1 py-2 text-xs font-medium rounded-lg text-neutral-500 hover:text-[#18181B] transition';
+      } else {
+        loginForm.classList.add('hidden');
+        signupForm.classList.remove('hidden');
+        signupBtn.className = 'flex-1 py-2 text-xs font-bold rounded-lg bg-white text-[#18181B] shadow-2xs transition';
+        loginBtn.className = 'flex-1 py-2 text-xs font-medium rounded-lg text-neutral-500 hover:text-[#18181B] transition';
+      }
+    };
+
+    function generateWorkspaceCode() {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let code = 'WS-';
+      for (let i = 0; i < 6; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
+      return code;
+    }
+
+    window.handleEmailLogin = async function(e) {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const password = document.getElementById('login-password').value;
+      const errEl = document.getElementById('login-error-msg');
+      const btn = document.getElementById('btn-submit-login');
+
+      errEl.classList.add('hidden');
+      btn.disabled = true;
+      btn.textContent = '로그인 중...';
+
+      try {
+        if (isLocalStandaloneMode) {
+          const store = getLocalStore();
+          const matched = Object.values(store.users).find(u => u.email === email && u.password === password);
+          if (!matched) throw new Error('INVALID_LOCAL_CRED');
+          store.currentUid = matched.uid;
+          saveLocalStore(store);
+          await loadUserAndEnterWorkspace({ uid: matched.uid, email: matched.email }, false);
+          return;
+        }
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (err) {
+        errEl.textContent = '이메일 또는 비밀번호가 올바르지 않습니다. 계정이 없다면 회원가입 탭을 이용해 주세요.';
+        errEl.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '로그인하고 워크스페이스 열기';
+      }
+    };
+
+    window.handleEmailSignup = async function(e) {
+      e.preventDefault();
+      const displayName = document.getElementById('signup-name').value.trim();
+      const role = document.getElementById('signup-role').value;
+      const email = document.getElementById('signup-email').value.trim();
+      const password = document.getElementById('signup-password').value;
+      const inviteCode = document.getElementById('signup-invite-code').value.trim().toUpperCase();
+      const errEl = document.getElementById('signup-error-msg');
+      const btn = document.getElementById('btn-submit-signup');
+
+      errEl.classList.add('hidden');
+      btn.disabled = true;
+      btn.textContent = '계정 및 워크스페이스 준비 중...';
+
+      try {
+        if (isLocalStandaloneMode) {
+          const store = getLocalStore();
+          if (Object.values(store.users).some(u => u.email === email)) {
+            throw { code: 'auth/email-already-in-use' };
+          }
+          const uid = 'local-user-' + Date.now();
+          const targetWsId = inviteCode || generateWorkspaceCode();
+          if (!store.workspaces[targetWsId]) {
+            store.workspaces[targetWsId] = {
+              id: targetWsId,
+              name: `${displayName}의 매거진 워크스페이스`,
+              createdAt: new Date().toISOString(),
+              createdBy: uid,
+              settings: JSON.parse(JSON.stringify(DEFAULT_SETTINGS)),
+              members: {},
+              deals: {}
+            };
+          }
+          const userProfile = {
+            uid,
+            email,
+            password,
+            displayName,
+            role,
+            activeWorkspaceId: targetWsId,
+            workspaces: [targetWsId]
+          };
+          store.users[uid] = userProfile;
+          store.workspaces[targetWsId].members[uid] = {
+            uid,
+            displayName,
+            role,
+            email,
+            joinedAt: new Date().toISOString()
+          };
+          store.currentUid = uid;
+          saveLocalStore(store);
+          await loadUserAndEnterWorkspace({ uid, email }, false);
+          return;
+        }
+
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        const uid = cred.user.uid;
+        let targetWsId = inviteCode || generateWorkspaceCode();
+
+        const wsRef = doc(db, 'artifacts', appId, 'public', 'data', 'workspaces', targetWsId);
+        const wsSnap = await getDoc(wsRef);
+        if (!wsSnap.exists()) {
+          await setDoc(wsRef, {
+            id: targetWsId,
+            name: `${displayName}의 매거진 워크스페이스`,
+            createdAt: new Date().toISOString(),
+            createdBy: uid,
+            settings: DEFAULT_SETTINGS
+          });
+        }
+
+        const profileData = {
+          uid,
+          email,
+          displayName,
+          role,
+          activeWorkspaceId: targetWsId,
+          workspaces: [targetWsId]
+        };
+
+        await setDoc(doc(db, 'artifacts', appId, 'users', uid, 'profile', 'info'), profileData);
+        await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'workspaces', targetWsId, 'members', uid), {
+          uid,
+          displayName,
+          role,
+          email,
+          joinedAt: new Date().toISOString()
+        });
+      } catch (err) {
+        errEl.textContent = err.code === 'auth/email-already-in-use'
+          ? '이미 가입된 이메일 주소입니다. 로그인 탭을 이용해 주세요.'
+          : '회원가입 중 오류가 발생했습니다. 입력 정보를 확인해 주세요.';
+        errEl.classList.remove('hidden');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '계정 생성 및 시작하기';
+      }
+    };
+
+    window.handleDemoQuickEnter = async function() {
+      try {
+        if (isLocalStandaloneMode) {
+          const store = getLocalStore();
+          const demoUid = 'demo-local-user';
+          store.currentUid = demoUid;
+          saveLocalStore(store);
+          await loadUserAndEnterWorkspace({ uid: demoUid, email: 'demo@atelier.kr' }, true);
+          showToast('로컬 영구 저장 모드로 데모 워크스페이스에 입장했습니다!');
+          return;
+        }
+
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
+        }
+      } catch (err) {
+        isLocalStandaloneMode = true;
+        const store = getLocalStore();
+        const demoUid = 'demo-local-user';
+        store.currentUid = demoUid;
+        saveLocalStore(store);
+        await loadUserAndEnterWorkspace({ uid: demoUid, email: 'demo@atelier.kr' }, true);
+        showToast('로컬 저장 모드로 데모 워크스페이스에 입장했습니다!');
+      }
+    };
+
+    window.handleLogout = async function() {
+      if (unsubWorkspace) unsubWorkspace();
+      if (unsubDeals) unsubDeals();
+      if (unsubMembers) unsubMembers();
+
+      if (isLocalStandaloneMode) {
+        const store = getLocalStore();
+        store.currentUid = null;
+        saveLocalStore(store);
+        document.getElementById('app').classList.add('hidden');
+        document.getElementById('app').classList.remove('flex');
+        document.getElementById('auth-gate').classList.remove('hidden');
+        showToast('로그아웃되었습니다.');
+        return;
+      }
+
+      await signOut(auth);
+      showToast('로그아웃되었습니다.');
+    };
+
+    // ---------------------------------------------------------
+    // 3. LOAD USER PROFILE & ENTER REAL-TIME WORKSPACE
+    // ---------------------------------------------------------
+    async function loadUserAndEnterWorkspace(firebaseUser, isDemo) {
+      const uid = firebaseUser.uid;
+
+      if (isLocalStandaloneMode) {
+        const store = getLocalStore();
+        let profileData = store.users[uid];
+        if (!profileData) {
+          const defaultName = isDemo ? '에디터 지수 (데모)' : (firebaseUser.email?.split('@')[0] || '에디터');
+          const defaultWsId = generateWorkspaceCode();
+          profileData = {
+            uid,
+            email: firebaseUser.email || 'demo@atelier.kr',
+            displayName: defaultName,
+            role: '총괄 에디터',
+            activeWorkspaceId: defaultWsId,
+            workspaces: [defaultWsId]
+          };
+          store.users[uid] = profileData;
+          store.workspaces[defaultWsId] = {
+            id: defaultWsId,
+            name: 'ATELIER SEOUL 매거진 팀',
+            createdAt: new Date().toISOString(),
+            createdBy: uid,
+            settings: JSON.parse(JSON.stringify(DEFAULT_SETTINGS)),
+            members: {},
+            deals: {}
+          };
+        }
+
+        const wsId = profileData.activeWorkspaceId;
+        if (!store.workspaces[wsId]) {
+          store.workspaces[wsId] = {
+            id: wsId,
+            name: 'ATELIER SEOUL 매거진 팀',
+            createdAt: new Date().toISOString(),
+            createdBy: uid,
+            settings: JSON.parse(JSON.stringify(DEFAULT_SETTINGS)),
+            members: {},
+            deals: {}
+          };
+        }
+        store.workspaces[wsId].members[uid] = {
+          uid,
+          displayName: profileData.displayName,
+          role: profileData.role,
+          email: profileData.email,
+          lastActive: new Date().toISOString()
+        };
+        saveLocalStore(store);
+
+        state.user = profileData;
+        document.getElementById('auth-gate').classList.add('hidden');
+        document.getElementById('app').classList.remove('hidden');
+        document.getElementById('app').classList.add('flex');
+        updateUserSidebarUI();
+        enterWorkspaceSession(wsId);
+        return;
+      }
+
+      const profileRef = doc(db, 'artifacts', appId, 'users', uid, 'profile', 'info');
+      const profileSnap = await getDoc(profileRef);
+      let profileData;
+
+      if (profileSnap.exists()) {
+        profileData = profileSnap.data();
+      } else {
+        const defaultName = isDemo ? '에디터 지수 (데모)' : (firebaseUser.email?.split('@')[0] || '에디터');
+        const defaultWsId = generateWorkspaceCode();
+        profileData = {
+          uid,
+          email: firebaseUser.email || 'demo@atelier.kr',
+          displayName: defaultName,
+          role: '총괄 에디터',
+          activeWorkspaceId: defaultWsId,
+          workspaces: [defaultWsId]
+        };
+        await setDoc(profileRef, profileData);
+      }
+
+      const wsId = profileData.activeWorkspaceId;
+      const wsRef = doc(db, 'artifacts', appId, 'public', 'data', 'workspaces', wsId);
+      const wsSnap = await getDoc(wsRef);
+      if (!wsSnap.exists()) {
+        await setDoc(wsRef, {
+          id: wsId,
+          name: 'ATELIER SEOUL 매거진 팀',
+          createdAt: new Date().toISOString(),
+          createdBy: uid,
+          settings: DEFAULT_SETTINGS
+        });
+      }
+
+      await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'workspaces', wsId, 'members', uid), {
+        uid,
+        displayName: profileData.displayName,
+        role: profileData.role,
+        email: profileData.email,
+        lastActive: new Date().toISOString()
+      }, { merge: true });
+
+      state.user = profileData;
+      document.getElementById('auth-gate').classList.add('hidden');
+      document.getElementById('app').classList.remove('hidden');
+      document.getElementById('app').classList.add('flex');
+
+      updateUserSidebarUI();
+      enterWorkspaceSession(wsId);
+    }
+
+    function updateUserSidebarUI() {
+      if (!state.user) return;
+      document.getElementById('user-name').textContent = state.user.displayName;
+      document.getElementById('user-role-email').textContent = `${state.user.role} · ${state.user.email}`;
+      document.getElementById('user-avatar').textContent = state.user.displayName.slice(0, 2).toUpperCase();
+    }
+
+    function enterWorkspaceSession(wsId) {
+      if (unsubWorkspace) unsubWorkspace();
+      if (unsubDeals) unsubDeals();
+      if (unsubMembers) unsubMembers();
+
+      state.workspaceId = wsId;
+      document.getElementById('ws-current-code-label').textContent = `코드: ${wsId}`;
+      document.getElementById('ws-invite-code-display').textContent = wsId;
+      document.getElementById('modal-ws-code').textContent = wsId;
+
+      if (isLocalStandaloneMode) {
+        const store = getLocalStore();
+        const ws = store.workspaces[wsId];
+        if (ws) {
+          state.workspaceName = ws.name || '매거진 워크스페이스';
+          state.settings = { ...DEFAULT_SETTINGS, ...(ws.settings || {}) };
+          state.members = Object.values(ws.members || {});
+          const rawDeals = Object.values(ws.deals || {});
+          const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
+          const nowMs = Date.now();
+          const validDeals = [];
+          for (const d of rawDeals) {
+            if (d.stage === '거절됨' && d.declinedAt && (nowMs - new Date(d.declinedAt).getTime()) >= sevenDaysMs) {
+              delete ws.deals[d.id];
+              continue;
+            }
+            validDeals.push(d);
+          }
+          saveLocalStore(store);
+          state.deals = validDeals;
+
+          document.getElementById('ws-current-name').textContent = state.workspaceName;
+          document.getElementById('modal-ws-name').textContent = state.workspaceName;
+          document.getElementById('ws-icon-badge').textContent = state.workspaceName.charAt(0).toUpperCase();
+          populateSettingsForm();
+          renderWorkspaceMembersUI();
+          setSyncStatus('saved');
+          refreshAllViews();
+        }
+        return;
+      }
+
+      const wsRef = doc(db, 'artifacts', appId, 'public', 'data', 'workspaces', wsId);
+      unsubWorkspace = onSnapshot(wsRef, (docSnap) => {
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          state.workspaceName = data.name || '매거진 워크스페이스';
+          state.settings = { ...DEFAULT_SETTINGS, ...(data.settings || {}) };
+          document.getElementById('ws-current-name').textContent = state.workspaceName;
+          document.getElementById('modal-ws-name').textContent = state.workspaceName;
+          document.getElementById('ws-icon-badge').textContent = state.workspaceName.charAt(0).toUpperCase();
+          populateSettingsForm();
+        }
+      }, (err) => console.error('Workspace sync error:', err));
+
+      const membersRef = collection(db, 'artifacts', appId, 'public', 'data', 'workspaces', wsId, 'members');
+      unsubMembers = onSnapshot(membersRef, (snap) => {
+        state.members = snap.docs.map(d => d.data());
+        renderWorkspaceMembersUI();
+      }, (err) => console.error('Members sync error:', err));
+
+      const dealsRef = collection(db, 'artifacts', appId, 'public', 'data', 'workspaces', wsId, 'deals');
+      unsubDeals = onSnapshot(dealsRef, async (snap) => {
+        const sevenDaysMs = 7 * 24 * 60 * 60 * 1000;
+        const nowMs = Date.now();
+        const validDeals = [];
+
+        for (const docItem of snap.docs) {
+          const d = { id: docItem.id, ...docItem.data() };
+          if (d.stage === '거절됨' && d.declinedAt) {
+            const elapsed = nowMs - new Date(d.declinedAt).getTime();
+            if (elapsed >= sevenDaysMs) {
+              deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'workspaces', wsId, 'deals', d.id)).catch(() => {});
+              continue;
+            }
+          }
+          validDeals.push(d);
+        }
+
+        state.deals = validDeals.sort((a, b) => (b.createdAt || '').localeCompare(a.createdAt || ''));
+        setSyncStatus('saved');
+        refreshAllViews();
+      }, (err) => console.error('Deals sync error:', err));
+    }
+
+    // ---------------------------------------------------------
+    // 4. WORKSPACE SWITCHER, INVITE & MEMBERS UI
+    // ---------------------------------------------------------
+    window.openWorkspaceModal = function() {
+      renderWorkspaceMembersUI();
+      renderMyWorkspacesList();
+      const modal = document.getElementById('workspace-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    };
+
+    window.closeWorkspaceModal = function() {
+      const modal = document.getElementById('workspace-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    };
+
+    window.copyWorkspaceInviteCode = function() {
+      if (!state.workspaceId) return;
+      copyTextFallback(state.workspaceId, `초대 코드 [${state.workspaceId}]가 복사되었습니다.`);
+    };
+
+    function renderWorkspaceMembersUI() {
+      const members = state.members.length > 0 ? state.members : (state.user ? [state.user] : []);
+      document.getElementById('kpi-member-count').textContent = `팀원 ${members.length}명`;
+      document.getElementById('modal-members-count').textContent = members.length;
+
+      const headerStack = document.getElementById('header-members-stack');
+      headerStack.innerHTML = members.slice(0, 5).map((m, idx) => {
+        const bgColors = ['bg-[#18181B]', 'bg-[#C85A32]', 'bg-[#3D6B5E]', 'bg-[#2563EB]', 'bg-neutral-700'];
+        return `<div title="${escapeHtml(m.displayName)} (${escapeHtml(m.role || '에디터')})" class="w-7 h-7 rounded-full ${bgColors[idx % bgColors.length]} text-white text-[10px] font-bold flex items-center justify-center ring-2 ring-white">${escapeHtml((m.displayName || 'ED').slice(0, 2))}</div>`;
+      }).join('');
+
+      const modalList = document.getElementById('modal-members-list');
+      modalList.innerHTML = members.map(m => `
+        <div class="p-3 rounded-xl bg-[#FAF9F6] border border-neutral-200 flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-[#18181B] text-white text-xs font-bold flex items-center justify-center shrink-0">${escapeHtml((m.displayName || 'ED').slice(0, 2))}</div>
+          <div class="min-w-0">
+            <p class="font-bold text-[#18181B] truncate">${escapeHtml(m.displayName)}</p>
+            <p class="text-[10px] text-neutral-500 truncate">${escapeHtml(m.role || '에디터')} · ${escapeHtml(m.email || '')}</p>
+          </div>
+        </div>
+      `).join('');
+
+      const memberOptions = members.map(m => `<option value="${escapeHtml(m.displayName)}">${escapeHtml(m.displayName)} (${escapeHtml(m.role || '에디터')})</option>`).join('');
+      const filterEditor = document.getElementById('filter-editor');
+      const prevFilter = filterEditor.value;
+      filterEditor.innerHTML = `<option value="ALL">모든 담당 에디터</option>` + members.map(m => `<option value="${escapeHtml(m.displayName)}">${escapeHtml(m.displayName)}</option>`).join('');
+      if ([...filterEditor.options].some(o => o.value === prevFilter)) filterEditor.value = prevFilter;
+
+      document.getElementById('nd-editor').innerHTML = memberOptions;
+      document.getElementById('edit-deal-editor').innerHTML = memberOptions;
+    }
+
+    function renderMyWorkspacesList() {
+      const container = document.getElementById('my-workspaces-list');
+      const wsIds = state.user?.workspaces || [state.workspaceId];
+      container.innerHTML = wsIds.map(id => {
+        const isCurrent = id === state.workspaceId;
+        return `<button onclick="switchToWorkspace('${escapeHtml(id)}')" class="px-3 py-1.5 rounded-xl text-xs font-mono font-semibold border transition ${isCurrent ? 'bg-[#18181B] text-white border-[#18181B]' : 'bg-white text-neutral-700 border-neutral-200 hover:bg-neutral-50'}">${escapeHtml(id)} ${isCurrent ? '(현재)' : ''}</button>`;
+      }).join('');
+    }
+
+    window.switchToWorkspace = async function(targetWsId) {
+      if (!state.user || targetWsId === state.workspaceId) return;
+      state.user.activeWorkspaceId = targetWsId;
+      if (isLocalStandaloneMode) {
+        const store = getLocalStore();
+        if (store.users[state.user.uid]) store.users[state.user.uid].activeWorkspaceId = targetWsId;
+        saveLocalStore(store);
+        closeWorkspaceModal();
+        enterWorkspaceSession(targetWsId);
+        showToast(`워크스페이스 [${targetWsId}](으)로 전환되었습니다.`);
+        return;
+      }
+      await setDoc(doc(db, 'artifacts', appId, 'users', state.user.uid, 'profile', 'info'), state.user, { merge: true });
+      closeWorkspaceModal();
+      enterWorkspaceSession(targetWsId);
+      showToast(`워크스페이스 [${targetWsId}](으)로 전환되었습니다.`);
+    };
+
+    window.handleJoinWorkspace = async function() {
+      const codeInput = document.getElementById('join-ws-code-input');
+      const code = codeInput.value.trim().toUpperCase();
+      if (!code) {
+        showToast('합류할 워크스페이스 초대 코드를 입력해주세요.');
+        return;
+      }
+
+      if (isLocalStandaloneMode) {
+        const store = getLocalStore();
+        const ws = store.workspaces[code];
+        if (!ws) {
+          showToast('현재 브라우저에 해당 초대 코드의 워크스페이스가 없습니다. 팀원 공유는 상단 배지에서 Firebase 키 연결 후 가능합니다.');
+          return;
+        }
+        if (!state.user.workspaces.includes(code)) state.user.workspaces.push(code);
+        state.user.activeWorkspaceId = code;
+        store.users[state.user.uid] = state.user;
+        ws.members[state.user.uid] = {
+          uid: state.user.uid,
+          displayName: state.user.displayName,
+          role: state.user.role,
+          email: state.user.email,
+          joinedAt: new Date().toISOString()
+        };
+        saveLocalStore(store);
+        codeInput.value = '';
+        closeWorkspaceModal();
+        enterWorkspaceSession(code);
+        showToast(`[${ws.name}] 워크스페이스에 합류했습니다!`);
+        return;
+      }
+
+      const wsRef = doc(db, 'artifacts', appId, 'public', 'data', 'workspaces', code);
+      const wsSnap = await getDoc(wsRef);
+      if (!wsSnap.exists()) {
+        showToast('존재하지 않는 초대 코드입니다. 코드를 다시 확인해주세요.');
+        return;
+      }
+
+      if (!state.user.workspaces.includes(code)) state.user.workspaces.push(code);
+      state.user.activeWorkspaceId = code;
+      await setDoc(doc(db, 'artifacts', appId, 'users', state.user.uid, 'profile', 'info'), state.user, { merge: true });
+      await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'workspaces', code, 'members', state.user.uid), {
+        uid: state.user.uid,
+        displayName: state.user.displayName,
+        role: state.user.role,
+        email: state.user.email,
+        joinedAt: new Date().toISOString()
+      }, { merge: true });
+
+      codeInput.value = '';
+      closeWorkspaceModal();
+      enterWorkspaceSession(code);
+      showToast(`[${wsSnap.data().name}] 워크스페이스에 합류했습니다!`);
+    };
+
+    window.handleCreateNewWorkspace = async function() {
+      const nameInput = document.getElementById('create-ws-name-input');
+      const name = nameInput.value.trim();
+      if (!name) {
+        showToast('새 워크스페이스 이름을 입력해주세요.');
+        return;
+      }
+
+      const newCode = generateWorkspaceCode();
+      if (isLocalStandaloneMode) {
+        const store = getLocalStore();
+        store.workspaces[newCode] = {
+          id: newCode,
+          name,
+          createdAt: new Date().toISOString(),
+          createdBy: state.user.uid,
+          settings: JSON.parse(JSON.stringify(DEFAULT_SETTINGS)),
+          members: {
+            [state.user.uid]: {
+              uid: state.user.uid,
+              displayName: state.user.displayName,
+              role: state.user.role,
+              email: state.user.email,
+              joinedAt: new Date().toISOString()
+            }
+          },
+          deals: {}
+        };
+        state.user.workspaces.push(newCode);
+        state.user.activeWorkspaceId = newCode;
+        store.users[state.user.uid] = state.user;
+        saveLocalStore(store);
+        nameInput.value = '';
+        closeWorkspaceModal();
+        enterWorkspaceSession(newCode);
+        showToast(`새 워크스페이스 '${name}'(${newCode})가 생성되었습니다.`);
+        return;
+      }
+
+      await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'workspaces', newCode), {
+        id: newCode,
+        name,
+        createdAt: new Date().toISOString(),
+        createdBy: state.user.uid,
+        settings: DEFAULT_SETTINGS
+      });
+
+      if (!state.user.workspaces.includes(newCode)) state.user.workspaces.push(newCode);
+      state.user.activeWorkspaceId = newCode;
+      await setDoc(doc(db, 'artifacts', appId, 'users', state.user.uid, 'profile', 'info'), state.user, { merge: true });
+      await setDoc(doc(db, 'artifacts', appId, 'public', 'data', 'workspaces', newCode, 'members', state.user.uid), {
+        uid: state.user.uid,
+        displayName: state.user.displayName,
+        role: state.user.role,
+        email: state.user.email,
+        joinedAt: new Date().toISOString()
+      });
+
+      nameInput.value = '';
+      closeWorkspaceModal();
+      enterWorkspaceSession(newCode);
+      showToast(`새 워크스페이스 '${name}'(${newCode})가 생성되었습니다.`);
+    };
+
+    // ---------------------------------------------------------
+    // 5. FIRESTORE CRUD HELPERS & SAMPLE SEEDING
+    // ---------------------------------------------------------
+    async function saveDealToFirestore(deal) {
+      if (!state.workspaceId || !deal?.id) return;
+      setSyncStatus('saving');
+      if (isLocalStandaloneMode) {
+        const store = getLocalStore();
+        if (store.workspaces[state.workspaceId]) {
+          if (!store.workspaces[state.workspaceId].deals) store.workspaces[state.workspaceId].deals = {};
+          store.workspaces[state.workspaceId].deals[deal.id] = JSON.parse(JSON.stringify(deal));
+          saveLocalStore(store);
+          state.deals = Object.values(store.workspaces[state.workspaceId].deals);
+          refreshAllViews();
+        }
+        setSyncStatus('saved');
+        return;
+      }
+      const dealRef = doc(db, 'artifacts', appId, 'public', 'data', 'workspaces', state.workspaceId, 'deals', deal.id);
+      await setDoc(dealRef, deal, { merge: true });
+      setSyncStatus('saved');
+    }
+
+    async function deleteDealFromFirestore(dealId) {
+      if (!state.workspaceId || !dealId) return;
+      setSyncStatus('saving');
+      if (isLocalStandaloneMode) {
+        const store = getLocalStore();
+        if (store.workspaces[state.workspaceId]?.deals) {
+          delete store.workspaces[state.workspaceId].deals[dealId];
+          saveLocalStore(store);
+          state.deals = Object.values(store.workspaces[state.workspaceId].deals);
+          refreshAllViews();
+        }
+        setSyncStatus('saved');
+        return;
+      }
+      const dealRef = doc(db, 'artifacts', appId, 'public', 'data', 'workspaces', state.workspaceId, 'deals', dealId);
+      await deleteDoc(dealRef);
+      setSyncStatus('saved');
+    }
+
+    window.seedSampleDealsToWorkspace = async function() {
+      const creatorName = state.user?.displayName || '에디터 지수';
+      const samples = [
+        {
+          id: 'deal-' + Date.now() + '-1',
+          brand: '탬버린즈 (TAMBURINS)',
+          campaign: '홀리데이 퍼퓸 캔들 에디토리얼 릴스',
+          category: '패션/뷰티',
+          stage: '기획/제작 중',
+          subStatus: '게시글/릴스 원고 제작 중',
+          contentType: '인스타그램 릴스 1편 + 스토리 2컷',
+          budget: 270,
+          budgetEvidence: '원문: "릴스 220만원 + 메타 광고 30일 50만원 총 270만원"',
+          draftDate: '2026-11-18',
+          uploadDate: '2026-11-24',
+          adEndDate: '2026-12-24',
+          dateEvidence: '원문: "11월 24일 업로드 희망"',
+          secondaryUsage: '메타 파트너십 광고 30일 집행 포함',
+          editor: creatorName,
+          settlement: '계산서 발행',
+          createdBy: creatorName,
+          createdAt: new Date().toISOString(),
+          messages: [
+            {
+              id: 'msg-s1',
+              direction: 'inbound',
+              sender: '탬버린즈 마케팅팀 (이메일)',
+              text: '안녕하세요, ATELIER SEOUL 에디터님. 11월 24일 홀리데이 퍼퓸 캔들 론칭에 맞춰 릴스 1편(220만원) 및 메타 파트너십 광고 30일(50만원) 총 270만원 예산으로 협업을 제안드립니다.',
+              timestamp: '2026.11.10 10:20'
+            },
+            {
+              id: 'msg-s2',
+              direction: 'outbound',
+              sender: creatorName,
+              text: '안녕하세요, ATELIER SEOUL 파트너십 팀입니다. 제안 주신 홀리데이 캔들 캠페인 너무 반갑습니다! 말씀 주신 총 270만원 조건과 11월 24일 업로드 일정으로 진행 가능하며, 11월 18일까지 1차 편집본 전달드리겠습니다.',
+              timestamp: '2026.11.10 14:05'
+            }
+          ],
+          checklist: [
+            { text: '브랜드 가이드라인 및 제품 샘플 수령', done: true },
+            { text: '촬영 스토리보드 및 무드보드 공유', done: true },
+            { text: '1차 편집본 전달 및 브랜드 컨펌', done: false }
+          ],
+          comments: [
+            { author: creatorName, text: '샘플 제품 3종 스튜디오 도착 완료! 이번 주 금요일 촬영 진행합니다.', time: '방금 전' }
+          ]
+        },
+        {
+          id: 'deal-' + Date.now() + '-2',
+          brand: '블루보틀 코리아',
+          campaign: '성수 겨울 시즌 한정 블렌드 팝업 취재',
+          category: 'F&B',
+          stage: '문의 접수',
+          subStatus: '신규 문의 검토 중',
+          contentType: '미기재',
+          budget: 0,
+          budgetEvidence: '원문 근거 없음 (미기재)',
+          draftDate: '',
+          uploadDate: '',
+          adEndDate: '',
+          dateEvidence: '원문 근거 없음 (미기재)',
+          secondaryUsage: '미기재',
+          editor: creatorName,
+          settlement: '미청구',
+          createdBy: creatorName,
+          createdAt: new Date().toISOString(),
+          messages: [
+            {
+              id: 'msg-s3',
+              direction: 'inbound',
+              sender: '블루보틀 브랜드팀 (인스타그램 DM)',
+              text: '안녕하세요 에디터님! 12월 성수에서 진행하는 겨울 시즌 팝업 관련해서 매거진 콘텐츠 협업 문의드립니다. 혹시 단가표와 12월 진행 가능 일정 공유받을 수 있을까요?',
+              timestamp: '2026.11.13 09:40'
+            }
+          ],
+          checklist: [
+            { text: '팀 논의 후 단가표 전달 여부 결정', done: false }
+          ],
+          comments: []
+        }
+      ];
+
+      for (const item of samples) {
+        await saveDealToFirestore(item);
+      }
+      showToast('샘플 협업 데이터 2건이 워크스페이스에 등록되었습니다.');
+    };
+
+    function setSyncStatus(status) {
+      const pill = document.getElementById('cloud-sync-pill');
+      const text = document.getElementById('cloud-sync-text');
+      if (!pill || !text) return;
+
+      if (status === 'saving') {
+        pill.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-200/80 hover:opacity-80 transition';
+        text.textContent = '동기화 중...';
+      } else if (isLocalStandaloneMode) {
+        pill.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-blue-50 text-blue-700 border border-blue-200/80 hover:opacity-80 transition';
+        text.textContent = '로컬 영구 저장됨 (클라우드 연결 설정)';
+      } else {
+        pill.className = 'inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200/80 hover:opacity-80 transition';
+        text.textContent = '클라우드 저장됨';
+      }
+    }
+
+    // ---------------------------------------------------------
+    // 6. NAVIGATION, TABS & UTILITY HELPERS
+    // ---------------------------------------------------------
+    window.openTab = function(tabName) {
+      ['pipeline', 'calendar', 'ai-analyzer', 'settings'].forEach(t => {
+        const view = document.getElementById(`view-${t}`);
+        if (view) view.classList.toggle('hidden', t !== tabName);
+      });
+
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        const isActive = btn.dataset.tab === tabName;
+        btn.className = isActive
+          ? 'nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all bg-[#18181B] text-white shadow-sm'
+          : 'nav-btn w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium text-neutral-600 hover:bg-neutral-100 transition-all';
+      });
+
+      const titles = {
+        'pipeline': ['협업 파이프라인', '브랜드 문의 접수부터 콘텐츠 발행, 정산까지 팀원들과 실시간 영구 동기화됩니다.'],
+        'calendar': ['협업 캘린더', '초안 마감일, 최종 업로드일, 2차 광고 종료일을 월간 캘린더에서 한눈에 확인하세요.'],
+        'ai-analyzer': ['AI 메일/DM 분석기', '원문을 팩트 기반으로 파싱하여 문의 접수에 등록하거나, 결정 방향에 맞춘 회신 초안을 생성합니다.'],
+        'settings': ['톤앤매너 & 단가/샘플', '우리 매거진의 소개, 단가 기준, 과거 우수 답변 샘플을 저장해 AI 품질을 높입니다.']
+      };
+      if (titles[tabName]) {
+        document.getElementById('page-title').textContent = titles[tabName][0];
+        document.getElementById('page-subtitle').textContent = titles[tabName][1];
+      }
+
+      if (tabName === 'calendar') renderCalendar();
+      if (tabName === 'settings') renderReplySamples();
+      toggleSidebar(false);
+    };
+
+    window.toggleSidebar = function(forceOpen) {
+      const sidebar = document.getElementById('sidebar');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      const isOpen = typeof forceOpen === 'boolean' ? forceOpen : sidebar.classList.contains('-translate-x-full');
+      if (isOpen) {
+        sidebar.classList.remove('-translate-x-full');
+        backdrop.classList.remove('hidden');
+      } else {
+        sidebar.classList.add('-translate-x-full');
+        backdrop.classList.add('hidden');
+      }
+    };
+
+    document.getElementById('mobile-menu-btn')?.addEventListener('click', () => toggleSidebar(true));
+
+    function escapeHtml(str) {
+      return String(str || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-message').textContent = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      clearTimeout(window._toastTimer);
+      window._toastTimer = setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3200);
+    }
+
+    function copyTextFallback(text, successMsg) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        showToast(successMsg || '클립보드에 복사되었습니다.');
+      } catch (e) {
+        showToast('복사에 실패했습니다. 직접 선택해 복사해 주세요.');
+      }
+      document.body.removeChild(ta);
+    }
+
+    function formatNowTimestamp() {
+      const d = new Date();
+      const pad = (n) => String(n).padStart(2, '0');
+      return `${d.getFullYear()}.${pad(d.getMonth() + 1)}.${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+    }
+
+    function refreshAllViews() {
+      const activeDeals = state.deals.filter(d => d.stage !== '거절됨');
+      const totalBudget = activeDeals.reduce((acc, d) => acc + (Number(d.budget) || 0), 0);
+      document.getElementById('nav-count-pipeline').textContent = state.deals.length;
+      document.getElementById('kpi-active-count').textContent = `${activeDeals.length}건`;
+      document.getElementById('kpi-total-budget').textContent = `${totalBudget.toLocaleString()}만원`;
+
+      const emptyBanner = document.getElementById('empty-workspace-banner');
+      if (emptyBanner) emptyBanner.classList.toggle('hidden', state.deals.length > 0);
+
+      renderPipeline();
+      renderCalendar();
+      if (state.selectedDealId) {
+        const current = state.deals.find(d => d.id === state.selectedDealId);
+        if (current) renderDealModalContents(current);
+      }
+    }
+
+    // ---------------------------------------------------------
+    // 7. PIPELINE (KANBAN BOARD & LIST VIEW)
+    // ---------------------------------------------------------
+    window.setPipelineMode = function(mode) {
+      state.pipelineMode = mode;
+      const kBtn = document.getElementById('btn-view-kanban');
+      const lBtn = document.getElementById('btn-view-list');
+      const kBox = document.getElementById('kanban-container');
+      const lBox = document.getElementById('list-container');
+
+      if (mode === 'kanban') {
+        kBtn.className = 'px-3 py-1 text-xs font-semibold rounded-lg bg-white text-[#18181B] shadow-2xs transition';
+        lBtn.className = 'px-3 py-1 text-xs font-medium rounded-lg text-neutral-500 hover:text-[#18181B] transition';
+        kBox.classList.remove('hidden');
+        lBox.classList.add('hidden');
+      } else {
+        lBtn.className = 'px-3 py-1 text-xs font-semibold rounded-lg bg-white text-[#18181B] shadow-2xs transition';
+        kBtn.className = 'px-3 py-1 text-xs font-medium rounded-lg text-neutral-500 hover:text-[#18181B] transition';
+        lBox.classList.remove('hidden');
+        kBox.classList.add('hidden');
+      }
+      renderPipeline();
+    };
+
+    function getFilteredDeals() {
+      const q = (document.getElementById('filter-search')?.value || '').trim().toLowerCase();
+      const cat = document.getElementById('filter-category')?.value || 'ALL';
+      const ed = document.getElementById('filter-editor')?.value || 'ALL';
+      const setl = document.getElementById('filter-settlement')?.value || 'ALL';
+
+      return state.deals.filter(d => {
+        if (q && !(d.brand || '').toLowerCase().includes(q) && !(d.campaign || '').toLowerCase().includes(q)) return false;
+        if (cat !== 'ALL' && d.category !== cat) return false;
+        if (ed !== 'ALL' && d.editor !== ed) return false;
+        if (setl !== 'ALL' && d.settlement !== setl) return false;
+        return true;
+      });
+    }
+
+    function getDeclinedRemainingDays(declinedAt) {
+      if (!declinedAt) return 7;
+      const elapsedDays = Math.floor((Date.now() - new Date(declinedAt).getTime()) / (1000 * 60 * 60 * 24));
+      return Math.max(0, 7 - elapsedDays);
+    }
+
+    window.renderPipeline = function() {
+      const deals = getFilteredDeals();
+      const kanban = document.getElementById('kanban-container');
+      const tbody = document.getElementById('list-tbody');
+
+      // Render Kanban Columns
+      kanban.innerHTML = STAGES.map(stage => {
+        const colDeals = deals.filter(d => d.stage === stage);
+        const isDeclinedCol = stage === '거절됨';
+        const headerBadgeColor = isDeclinedCol
+          ? 'bg-red-100 text-red-700'
+          : stage === '문의 접수'
+            ? 'bg-[#C85A32]/15 text-[#C85A32]'
+            : 'bg-neutral-200/80 text-neutral-700';
+
+        const cardsHtml = colDeals.length === 0
+          ? `<div class="p-6 text-center text-[11px] text-neutral-400 border border-dashed border-neutral-200 rounded-xl">해당 단계 협업 없음</div>`
+          : colDeals.map(d => {
+              const msgCount = (d.messages || []).length;
+              const budgetLabel = Number(d.budget) > 0 ? `${Number(d.budget).toLocaleString()}만원` : '금액 미기재';
+              const dateLabel = d.uploadDate ? `업로드 ${d.uploadDate}` : '일정 미정';
+              const dDayBadge = isDeclinedCol
+                ? `<span class="px-1.5 py-0.5 text-[10px] font-bold rounded bg-red-50 text-red-600 border border-red-200">D-${getDeclinedRemainingDays(d.declinedAt)} 자동삭제</span>`
+                : '';
+
+              return `
+                <div onclick="openDealModal('${escapeHtml(d.id)}')" class="p-3.5 bg-white rounded-xl border border-neutral-200/90 hover:border-[#18181B] shadow-2xs cursor-pointer transition space-y-2.5 group">
+                  <div class="flex items-center justify-between gap-1.5">
+                    <span class="px-2 py-0.5 text-[10px] font-semibold rounded-md bg-[#FAF9F6] border border-neutral-200 text-neutral-700">${escapeHtml(d.category || '기타')}</span>
+                    ${dDayBadge || `<span class="text-[10px] text-neutral-400">대화 ${msgCount}건</span>`}
+                  </div>
+                  <div>
+                    <h4 class="text-xs font-bold text-[#18181B] group-hover:text-[#C85A32] transition">${escapeHtml(d.brand)}</h4>
+                    <p class="text-[11px] text-neutral-500 line-clamp-1 mt-0.5">${escapeHtml(d.campaign)}</p>
+                  </div>
+                  ${d.subStatus ? `<div class="px-2 py-1 rounded-lg bg-[#FFF8F5] border border-[#C85A32]/20 text-[10px] font-semibold text-[#C85A32] truncate">${escapeHtml(d.subStatus)}</div>` : ''}
+                  <div class="pt-2 border-t border-neutral-100 flex items-center justify-between text-[11px]">
+                    <span class="font-bold ${Number(d.budget) > 0 ? 'text-[#18181B]' : 'text-neutral-400'}">${budgetLabel}</span>
+                    <span class="text-neutral-500">${dateLabel}</span>
+                  </div>
+                  <div class="flex items-center justify-between text-[10px] text-neutral-400">
+                    <span>담당: <strong class="text-neutral-600">${escapeHtml(d.editor || '미지정')}</strong></span>
+                    <span>${escapeHtml(d.settlement || '미청구')}</span>
+                  </div>
+                </div>
+              `;
+            }).join('');
+
+        return `
+          <div class="kanban-col bg-[#F2F0EB]/70 p-3 rounded-2xl border border-neutral-200/70 space-y-2.5 shrink-0">
+            <div class="flex items-center justify-between px-1">
+              <span class="text-xs font-bold text-[#18181B]">${escapeHtml(stage)}</span>
+              <span class="px-2 py-0.5 text-[11px] font-bold rounded-full ${headerBadgeColor}">${colDeals.length}</span>
+            </div>
+            <div class="space-y-2.5">${cardsHtml}</div>
+          </div>
+        `;
+      }).join('');
+
+      // Render List View Table
+      tbody.innerHTML = deals.length === 0
+        ? `<tr><td colspan="8" class="py-10 text-center text-neutral-400">조건에 맞는 협업 건이 없습니다.</td></tr>`
+        : deals.map(d => `
+          <tr onclick="openDealModal('${escapeHtml(d.id)}')" class="hover:bg-[#FAF9F6] cursor-pointer transition">
+            <td class="py-3.5 px-4">
+              <p class="font-bold text-[#18181B]">${escapeHtml(d.brand)}</p>
+              <p class="text-[11px] text-neutral-500">${escapeHtml(d.campaign)}</p>
+            </td>
+            <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded bg-neutral-100 text-neutral-700">${escapeHtml(d.category || '-')}</span></td>
+            <td class="py-3.5 px-4">
+              <span class="font-semibold text-[#18181B] block">${escapeHtml(d.stage)}</span>
+              <span class="text-[10px] text-[#C85A32]">${escapeHtml(d.subStatus || '')}</span>
+            </td>
+            <td class="py-3.5 px-4 text-neutral-600">${escapeHtml(d.contentType || '미기재')}</td>
+            <td class="py-3.5 px-4 font-bold text-[#C85A32]">${Number(d.budget) > 0 ? Number(d.budget).toLocaleString() + '만원' : '미기재'}</td>
+            <td class="py-3.5 px-4 text-neutral-600">${escapeHtml(d.uploadDate || '일정 미정')}</td>
+            <td class="py-3.5 px-4 font-medium">${escapeHtml(d.editor || '-')}</td>
+            <td class="py-3.5 px-4"><span class="px-2 py-0.5 rounded bg-neutral-100">${escapeHtml(d.settlement || '미청구')}</span></td>
+          </tr>
+        `).join('');
+    };
+
+    // ---------------------------------------------------------
+    // 8. COLLABORATION CALENDAR RENDERING
+    // ---------------------------------------------------------
+    window.changeMonth = function(delta) {
+      state.calendarMonth += delta;
+      if (state.calendarMonth > 11) {
+        state.calendarMonth = 0;
+        state.calendarYear++;
+      } else if (state.calendarMonth < 0) {
+        state.calendarMonth = 11;
+        state.calendarYear--;
+      }
+      renderCalendar();
+    };
+
+    window.resetToToday = function() {
+      const now = new Date();
+      state.calendarYear = now.getFullYear();
+      state.calendarMonth = now.getMonth();
+      renderCalendar();
+    };
+
+    window.renderCalendar = function() {
+      const label = document.getElementById('calendar-month-label');
+      const grid = document.getElementById('calendar-days-grid');
+      if (!label || !grid) return;
+
+      const year = state.calendarYear;
+      const month = state.calendarMonth;
+      label.textContent = `${year}년 ${month + 1}월`;
+
+      const firstDay = new Date(year, month, 1).getDay();
+      const daysInMonth = new Date(year, month + 1, 0).getDate();
+      const activeDeals = state.deals.filter(d => d.stage !== '거절됨');
+
+      let cellsHtml = '';
+      for (let i = 0; i < firstDay; i++) {
+        cellsHtml += `<div class="min-h-[104px] bg-neutral-50/60 border-r border-b border-neutral-200 p-1.5"></div>`;
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        const events = [];
+
+        activeDeals.forEach(d => {
+          if (d.draftDate === dateStr) events.push({ id: d.id, label: `[초안] ${d.brand}`, cls: 'bg-amber-100 text-amber-900 border-amber-200' });
+          if (d.uploadDate === dateStr) events.push({ id: d.id, label: `[업로드] ${d.brand}`, cls: 'bg-[#18181B] text-white border-[#18181B]' });
+          if (d.adEndDate === dateStr) events.push({ id: d.id, label: `[광고종료] ${d.brand}`, cls: 'bg-[#3D6B5E] text-white border-[#3D6B5E]' });
+        });
+
+        const eventsHtml = events.map(ev =>
+          `<button onclick="openDealModal('${escapeHtml(ev.id)}')" class="w-full text-left px-1.5 py-0.5 rounded text-[10px] font-semibold truncate border ${ev.cls} hover:opacity-85 transition">${escapeHtml(ev.label)}</button>`
+        ).join('');
+
+        cellsHtml += `
+          <div class="min-h-[104px] bg-white border-r border-b border-neutral-200 p-1.5 flex flex-col gap-1">
+            <span class="text-[11px] font-semibold text-neutral-600 px-1">${day}</span>
+            <div class="space-y-1 overflow-y-auto max-h-[76px]">${eventsHtml}</div>
+          </div>
+        `;
+      }
+
+      grid.innerHTML = cellsHtml;
+    };
+
+    // ---------------------------------------------------------
+    // 9. GEMINI AI CALLER & 2-STAGE INTAKE / ANALYZER
+    // ---------------------------------------------------------
+    async function callGeminiJSON(systemPrompt, userPrompt, schema) {
+      const apiKey = getActiveGeminiApiKey();
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+      const payload = {
+        contents: [{ parts: [{ text: userPrompt }] }],
+        systemInstruction: { parts: [{ text: systemPrompt }] },
+        generationConfig: {
+          responseMimeType: 'application/json',
+          responseSchema: schema
+        }
+      };
+
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (!response.ok) throw new Error('API_HTTP_' + response.status);
+          const result = await response.json();
+          const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (text) return JSON.parse(text);
+        } catch (err) {
+          if (attempt < 2) await new Promise(r => setTimeout(r, 1000 * Math.pow(2, attempt)));
+        }
+      }
+      return null;
+    }
+
+    async function callGeminiText(systemPrompt, userPrompt) {
+      const apiKey = getActiveGeminiApiKey();
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+      const payload = {
+        contents: [{ parts: [{ text: userPrompt }] }],
+        systemInstruction: { parts: [{ text: systemPrompt }] }
+      };
+
+      for (let attempt = 0; attempt < 3; attempt++) {
+        try {
+          const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+          if (!response.ok) throw new Error('API_HTTP_' + response.status);
+          const result = await response.json();
+          const text = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+          if (text) return text;
+        } catch (err) {
+          if (attempt < 2) await new Promise(r => setTimeout(r, 1000 * Math.pow(2, attempt)));
+        }
+      }
+      return null;
+    }
+
+    function heuristicExtractFromText(raw) {
+      const budgetMatch = raw.match(/(\d{2,4})\s*만\s*원/);
+      // Check if brand gave a date range like "3월 23일~29일" or "3월 23일에서 29일 사이"
+      const rangeMatch = raw.match(/(\d{1,2})월\s*(\d{1,2})일\s*(?:~|-|에서|부터)\s*(?:\d{1,2}월\s*)?(\d{1,2})일/);
+      const dateMatch = raw.match(/(202\d)[.\-/년\s]+(\d{1,2})[.\-/월\s]+(\d{1,2})/);
+      const shortDateMatch = raw.match(/(\d{1,2})월\s*(\d{1,2})일/);
+      let uploadDate = '';
+      let dateEvidence = '원문 근거 없음 (미기재)';
+
+      if (rangeMatch) {
+        uploadDate = '';
+        dateEvidence = `원문 희망 기간: "${rangeMatch[0]}" (단일 날짜 확정 대기)`;
+      } else if (dateMatch) {
+        uploadDate = `${dateMatch[1]}-${String(dateMatch[2]).padStart(2, '0')}-${String(dateMatch[3]).padStart(2, '0')}`;
+        dateEvidence = `원문 근거: "${dateMatch[0]}"`;
+      } else if (shortDateMatch) {
+        uploadDate = `2026-${String(shortDateMatch[1]).padStart(2, '0')}-${String(shortDateMatch[2]).padStart(2, '0')}`;
+        dateEvidence = `원문 근거: "${shortDateMatch[0]}"`;
+      }
+
+      const firstLine = raw.split('\n').map(l => l.trim()).find(l => l.length > 1) || '신규 브랜드';
+      return {
+        brand: firstLine.slice(0, 22),
+        campaign: '브랜드 협업 캠페인 문의',
+        category: '라이프스타일',
+        contentType: raw.includes('릴스') ? '인스타그램 릴스' : raw.includes('피드') ? '인스타그램 피드' : '미기재',
+        budget: budgetMatch ? Number(budgetMatch[1]) : 0,
+        budgetEvidence: budgetMatch ? `원문 근거: "${budgetMatch[0]}"` : '원문 근거 없음 (미기재)',
+        draftDate: '',
+        uploadDate,
+        adEndDate: '',
+        dateEvidence,
+        secondaryUsage: raw.includes('2차') || raw.includes('광고') ? '2차 활용/광고 언급 있음 (세부 확인 필요)' : '미기재'
+      };
+    }
+
+    async function extractGroundedSpecs(rawText) {
+      const schema = {
+        type: 'OBJECT',
+        properties: {
+          brand: { type: 'STRING' },
+          campaign: { type: 'STRING' },
+          category: { type: 'STRING' },
+          contentType: { type: 'STRING' },
+          budget: { type: 'NUMBER' },
+          budgetEvidence: { type: 'STRING' },
+          draftDate: { type: 'STRING' },
+          uploadDate: { type: 'STRING' },
+          adEndDate: { type: 'STRING' },
+          dateEvidence: { type: 'STRING' },
+          secondaryUsage: { type: 'STRING' }
+        },
+        required: ['brand', 'campaign', 'category', 'contentType', 'budget', 'budgetEvidence', 'draftDate', 'uploadDate', 'adEndDate', 'dateEvidence', 'secondaryUsage']
+      };
+
+      const sys = `당신은 매거진 협업 메일 팩트 추출기입니다.
+절대 규칙:
+1. 원문에 숫자로 명시되지 않은 예산(budget)은 반드시 0으로 반환하세요. 절대 추측하거나 기본 단가를 넣지 마세요.
+2. 단일 날짜로 확정된 경우에만 draftDate, uploadDate, adEndDate를 YYYY-MM-DD 형식으로 반환하세요. 만약 브랜드가 "3월 23일~29일 사이"처럼 기간 범위로만 제안했고 아직 특정 하루가 정해지지 않았다면 uploadDate는 빈 문자열("")로 두고 dateEvidence에 "원문 희망 기간: 3월 23일~29일 (확정 대기)"라고 기록하세요.
+3. category는 반드시 ['패션/뷰티', '라이프스타일', 'F&B', '문화/전시', 'IT/테크'] 중 하나를 선택하세요.
+4. budgetEvidence와 dateEvidence에는 원문에서 해당 숫자/날짜/기간을 찾은 문장 인용구를 적고, 없으면 "원문 근거 없음 (미기재)"라고 적으세요.`;
+
+      const aiRes = await callGeminiJSON(sys, `다음 문의 원문에서 명시된 팩트만 추출하세요:\n\n${rawText}`, schema);
+      return aiRes || heuristicExtractFromText(rawText);
+    }
+
+    window.loadSampleInquiry = function(type) {
+      const textarea = document.getElementById('ai-raw-input');
+      const channel = document.getElementById('ai-channel-type');
+      if (type === 'email') {
+        channel.value = '비즈니스 이메일';
+        textarea.value = `안녕하세요, ATELIER SEOUL 에디터님.\n라이프스타일 오브제 브랜드 '무아레 스튜디오(MOIRE STUDIO)' 마케팅팀 김서연 매니저입니다.\n\n평소 매거진의 감각적인 공간 및 오브제 큐레이션을 인상 깊게 보고 있습니다.\n오는 2026년 11월 27일 출시되는 겨울 세라믹 조명 컬렉션과 관련하여 인스타그램 릴스 1편 협업을 제안드리고자 합니다.\n\n• 제안 예산: 220만원 (VAT 별도)\n• 희망 초안 전달일: 2026년 11월 21일\n• 희망 최종 업로드일: 2026년 11월 27일\n• 2차 활용 희망: 자사몰 상세페이지 및 브랜드 공식 계정 리그램 (3개월)\n\n검토 후 진행 가능 여부 및 회신 부탁드립니다. 감사합니다.`;
+      } else {
+        channel.value = '인스타그램 DM';
+        textarea.value = `안녕하세요 ATELIER SEOUL 담당자님! 스페셜티 티 브랜드 '오후의 찻자리'입니다 :) 연말 시즌 신제품 출시 기념으로 매거진과 콘텐츠 협업을 진행해보고 싶어 연락드렸습니다. 아직 구체적인 예산이나 업로드 날짜는 내부 조율 중인데, 먼저 매거진 협업 단가표와 미디어킷을 받아볼 수 있을까요?`;
+      }
+      showToast('샘플 원문이 입력되었습니다.');
+    };
+
+    window.runFactualIntakeAndRegister = async function() {
+      const raw = document.getElementById('ai-raw-input').value.trim();
+      const channel = document.getElementById('ai-channel-type').value;
+      if (!raw) {
+        showToast('먼저 브랜드 메일이나 DM 원문을 붙여넣어 주세요.');
+        return;
+      }
+
+      const btn = document.getElementById('btn-quick-intake');
+      btn.disabled = true;
+      btn.textContent = '원문 팩트 추출 및 문의 접수 등록 중...';
+
+      try {
+        const specs = await extractGroundedSpecs(raw);
+        const creator = state.user?.displayName || '에디터';
+        const newDeal = {
+          id: 'deal-' + Date.now(),
+          brand: specs.brand || '신규 브랜드',
+          campaign: specs.campaign || '협업 제안 문의',
+          category: specs.category || '라이프스타일',
+          stage: '문의 접수',
+          subStatus: '신규 문의 검토 중',
+          contentType: specs.contentType || '미기재',
+          budget: Number(specs.budget) || 0,
+          budgetEvidence: specs.budgetEvidence || '원문 근거 없음 (미기재)',
+          draftDate: specs.draftDate || '',
+          uploadDate: specs.uploadDate || '',
+          adEndDate: specs.adEndDate || '',
+          dateEvidence: specs.dateEvidence || '원문 근거 없음 (미기재)',
+          secondaryUsage: specs.secondaryUsage || '미기재',
+          editor: creator,
+          settlement: '미청구',
+          createdBy: creator,
+          createdAt: new Date().toISOString(),
+          messages: [
+            {
+              id: 'msg-' + Date.now(),
+              direction: 'inbound',
+              sender: `${specs.brand || '브랜드'} (${channel})`,
+              text: raw,
+              timestamp: formatNowTimestamp()
+            }
+          ],
+          checklist: [
+            { text: '팀 논의 후 진행/단가표/추가문의/거절 결정', done: false }
+          ],
+          comments: []
+        };
+
+        await saveDealToFirestore(newDeal);
+        document.getElementById('ai-raw-input').value = '';
+        showToast(`[${newDeal.brand}] 건이 '문의 접수' 단계에 등록되었습니다!`);
+        openTab('pipeline');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<svg class="w-4 h-4 text-[#F4A261]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/></svg><span>원문 분석 후 '문의 접수' 단계에 바로 등록 (팀 논의용)</span>`;
+      }
+    };
+
+    window.runAIAnalysisOnly = async function() {
+      const raw = document.getElementById('ai-raw-input').value.trim();
+      if (!raw) {
+        showToast('분석할 메일이나 DM 원문을 입력해주세요.');
+        return;
+      }
+
+      document.getElementById('ai-placeholder').classList.add('hidden');
+      document.getElementById('ai-result-box').classList.add('hidden');
+      document.getElementById('ai-loading').classList.remove('hidden');
+
+      const specs = await extractGroundedSpecs(raw);
+      document.getElementById('parsed-brand').value = specs.brand || '';
+      document.getElementById('parsed-campaign').value = specs.campaign || '';
+      document.getElementById('parsed-category').value = specs.category || '라이프스타일';
+      document.getElementById('ai-parsed-category-badge').textContent = specs.category || '라이프스타일';
+      document.getElementById('parsed-content-type').value = specs.contentType || '미기재';
+      document.getElementById('parsed-budget').value = Number(specs.budget) || 0;
+      document.getElementById('evidence-budget-badge').textContent = Number(specs.budget) > 0 ? '원문 확인됨' : '미기재';
+      document.getElementById('evidence-budget-text').textContent = specs.budgetEvidence || '원문 근거: 없음';
+      document.getElementById('parsed-upload-date').value = specs.uploadDate || '';
+      document.getElementById('evidence-date-badge').textContent = specs.uploadDate ? '원문 확인됨' : '미기재';
+      document.getElementById('evidence-date-text').textContent = specs.dateEvidence || '원문 근거: 없음';
+      document.getElementById('parsed-secondary').value = specs.secondaryUsage || '미기재';
+
+      document.getElementById('ai-loading').classList.add('hidden');
+      document.getElementById('ai-result-box').classList.remove('hidden');
+    };
+
+    window.selectAnalyzerDecision = function(decision) {
+      state.analyzerDecision = decision;
+      document.querySelectorAll('.analyzer-dec-btn').forEach(btn => {
+        const isSel = btn.dataset.decision === decision;
+        btn.className = isSel
+          ? 'analyzer-dec-btn p-2.5 rounded-xl border-2 border-[#18181B] bg-[#FAF9F6] text-left transition'
+          : 'analyzer-dec-btn p-2.5 rounded-xl border border-neutral-200 bg-white hover:bg-[#FAF9F6] text-left transition';
+      });
+    };
+
+    async function buildAIReplyDraft(conversationText, decision, instruction) {
+      const decisionMap = {
+        proceed_ratecard: '협업 진행 수락 의사 전달과 함께 매거진 기본 단가표·미디어킷 및 진행 절차 안내',
+        clarify: '협업 검토 및 진행을 위해 필요한 세부 조건(제품/브랜드 자료, 희망 일정, 예산 범위, 2차 활용 여부 등) 추가 문의',
+        decline: '이번 캠페인은 내부 편집 일정/방향성으로 인해 진행이 어렵다는 정중한 협업 거절 회신',
+        custom: '현재까지 오간 브랜드 메일의 전체 맥락과 팀 지시사항을 반영한 맞춤형 후속 메일 작성 (일정 확정/역제안, 시안 전달, 피드백 조율, 정산·인사이트 안내 등 상황에 맞는 자연스러운 응대)'
+      };
+
+      const samplesText = (state.settings.samples || [])
+        .map((s, idx) => `[샘플 ${idx + 1}: ${s.title}]\n${s.body}`)
+        .join('\n\n');
+
+      const sys = `당신은 매거진 '${state.settings.magName}'의 브랜드 파트너십 담당자입니다.
+매거진 소개: ${state.settings.magBio}
+기본 단가 및 2차 활용 정책:\n${state.settings.rateCard}
+공식 서명:\n${state.settings.signature}
+
+[참고 회신 샘플]
+${samplesText}
+
+작성 규칙:
+- 반드시 매거진 고유의 정중하고 감각적인 에디토리얼 톤앤매너를 유지하세요.
+- 원문에 없는 금액이나 확정되지 않은 일정을 임의로 지어내지 마세요.
+- 만약 브랜드가 기간 범위(예: 3월 23일~29일 사이)를 제안했고 팀 지시사항에 특정 업로드 날짜가 포함되어 있다면, 해당 날짜로 최종 업로드일을 제안·확정하는 문구를 명확하게 작성하세요.
+- 선택된 팀 의사결정(${decisionMap[decision] || decisionMap.custom})과 추가 지시사항을 정확히 반영해 바로 발송 가능한 한국어 회신 본문만 출력하세요.`;
+
+      const userPrompt = `[대화 내역]\n${conversationText}\n\n[선택된 결정]: ${decisionMap[decision] || decisionMap.custom}\n[팀 추가 지시사항]: ${instruction || '없음 (현재 대화 맥락에 가장 자연스럽게 이어지는 회신 작성)'}`;
+      const generated = await callGeminiText(sys, userPrompt);
+
+      if (generated) return generated.trim();
+
+      // Offline / No-Key Fallback Template
+      const intro = `안녕하세요, 담당자님.\n${state.settings.magName} 파트너십 팀입니다.\n\n보내주신 메일 감사히 확인했습니다.\n`;
+      const bodyByDec = {
+        proceed_ratecard: `제안 주신 캠페인에 긍정적으로 함께하고자 하며, 저희 매거진의 기본 협업 단가 기준 및 진행 안내를 공유드립니다.\n\n${state.settings.rateCard}\n${instruction ? '\n[진행 안내 및 제안 사항]\n' + instruction : ''}\n검토 후 희망하시는 콘텐츠 포맷과 최종 일정을 회신해 주시면 상세 기획안으로 안내드리겠습니다.`,
+        clarify: `원활한 협업 검토를 위해 몇 가지 세부 사항을 여쭙고자 합니다.\n• 희망하시는 콘텐츠 포맷(릴스/피드) 및 목표 업로드 일정\n• 책정하신 협업 예산 범위 및 2차 활용(광고 집행 등) 희망 여부${instruction ? '\n• ' + instruction : ''}\n확인 후 회신해 주시면 빠르게 검토하여 안내드리겠습니다.`,
+        decline: `귀사의 소중한 제안에 깊이 감사드리나, 현재 내부 편집 일정 및 콘텐츠 편성 방향상 아쉽게도 이번 캠페인은 함께하기 어려울 것 같습니다.${instruction ? '\n' + instruction : ''}\n다음에 더 좋은 기회로 인사드릴 수 있기를 진심으로 바랍니다.`,
+        custom: `${instruction ? instruction : '말씀 주신 내용 확인하여 안내드립니다. 추가로 필요하신 사항이나 조율이 필요한 부분이 있다면 언제든 편하게 말씀해 주세요.'}`
+      };
+      return `${intro}\n${bodyByDec[decision] || bodyByDec.custom}\n\n${state.settings.signature}`;
+    }
+
+    window.generateReplyFromAnalyzerDecision = async function() {
+      const raw = document.getElementById('ai-raw-input').value.trim();
+      const instruction = document.getElementById('analyzer-team-instruction').value.trim();
+      const replySec = document.getElementById('analyzer-reply-section');
+      const replyOut = document.getElementById('ai-reply-output');
+
+      replySec.classList.remove('hidden');
+      replyOut.value = '우리 매거진 톤앤매너와 단가표를 반영해 맞춤형 답장을 작성 중입니다...';
+
+      const draft = await buildAIReplyDraft(raw, state.analyzerDecision, instruction);
+      replyOut.value = draft;
+    };
+
+    window.copyGeneratedReply = function() {
+      const text = document.getElementById('ai-reply-output').value;
+      copyTextFallback(text, '생성된 회신 초안이 복사되었습니다.');
+    };
+
+    window.registerAnalyzedDealWithDecision = async function() {
+      const raw = document.getElementById('ai-raw-input').value.trim();
+      const channel = document.getElementById('ai-channel-type').value;
+      const replyText = document.getElementById('ai-reply-output').value.trim();
+      const brand = document.getElementById('parsed-brand').value.trim() || '신규 브랜드';
+      const campaign = document.getElementById('parsed-campaign').value.trim() || '협업 캠페인';
+      const category = document.getElementById('parsed-category').value;
+      const contentType = document.getElementById('parsed-content-type').value.trim() || '미기재';
+      const budget = Number(document.getElementById('parsed-budget').value) || 0;
+      const uploadDate = document.getElementById('parsed-upload-date').value || '';
+      const secondaryUsage = document.getElementById('parsed-secondary').value.trim() || '미기재';
+
+      const stageByDecision = {
+        proceed_ratecard: { stage: '단가표 전달 / 협의', sub: '진행 수락 및 단가표 회신 완료' },
+        clarify: { stage: '단가표 전달 / 협의', sub: '세부 조건/일정 조율 중' },
+        decline: { stage: '거절됨', sub: '협업 거절 회신 완료' },
+        custom: { stage: '단가표 전달 / 협의', sub: '맞춤 회신 완료 (후속 협의 중)' }
+      };
+
+      const mapped = stageByDecision[state.analyzerDecision] || stageByDecision.proceed_ratecard;
+      const creator = state.user?.displayName || '에디터';
+      const messages = [
+        {
+          id: 'msg-' + Date.now() + '-in',
+          direction: 'inbound',
+          sender: `${brand} (${channel})`,
+          text: raw,
+          timestamp: formatNowTimestamp()
+        }
+      ];
+      if (replyText) {
+        messages.push({
+          id: 'msg-' + Date.now() + '-out',
+          direction: 'outbound',
+          sender: creator,
+          text: replyText,
+          timestamp: formatNowTimestamp()
+        });
+      }
+
+      const newDeal = {
+        id: 'deal-' + Date.now(),
+        brand,
+        campaign,
+        category,
+        stage: mapped.stage,
+        subStatus: mapped.sub,
+        contentType,
+        budget,
+        budgetEvidence: document.getElementById('evidence-budget-text').textContent,
+        draftDate: '',
+        uploadDate,
+        adEndDate: '',
+        dateEvidence: document.getElementById('evidence-date-text').textContent,
+        secondaryUsage,
+        editor: creator,
+        settlement: '미청구',
+        declinedAt: mapped.stage === '거절됨' ? new Date().toISOString() : '',
+        createdBy: creator,
+        createdAt: new Date().toISOString(),
+        messages,
+        checklist: [{ text: '회신 발송 확인 및 다음 액션 체크', done: Boolean(replyText) }],
+        comments: []
+      };
+
+      await saveDealToFirestore(newDeal);
+      showToast(`[${brand}] 건이 '${mapped.stage}' 단계로 등록되었습니다!`);
+      openTab('pipeline');
+    };
+
+    // ---------------------------------------------------------
+    // 10. DEAL DETAIL MODAL (CUMULATIVE THREAD + AUTO SPEC SYNC)
+    // ---------------------------------------------------------
+    window.openDealModal = function(dealId) {
+      const deal = state.deals.find(d => d.id === dealId);
+      if (!deal) return;
+      state.selectedDealId = dealId;
+      renderDealModalContents(deal);
+
+      const modal = document.getElementById('deal-detail-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    };
+
+    window.closeDealModal = function() {
+      state.selectedDealId = null;
+      const modal = document.getElementById('deal-detail-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    };
+
+    function renderDealModalContents(deal) {
+      document.getElementById('modal-deal-category').textContent = deal.category || '라이프스타일';
+      document.getElementById('modal-deal-title').textContent = `${deal.brand} — ${deal.campaign}`;
+      document.getElementById('modal-deal-creator').textContent = `최초 등록자: ${deal.createdBy || '에디터'} · ${deal.createdAt ? deal.createdAt.slice(0, 10) : ''}`;
+
+      const declinedBadge = document.getElementById('modal-declined-countdown');
+      if (deal.stage === '거절됨') {
+        declinedBadge.classList.remove('hidden');
+        declinedBadge.textContent = `D-${getDeclinedRemainingDays(deal.declinedAt)} 후 자동 삭제`;
+      } else {
+        declinedBadge.classList.add('hidden');
+      }
+
+      document.getElementById('edit-deal-stage').value = deal.stage || '문의 접수';
+      document.getElementById('edit-deal-substatus').value = deal.subStatus || '신규 문의 검토 중';
+      document.getElementById('edit-deal-editor').value = deal.editor || '';
+      document.getElementById('edit-deal-settlement').value = deal.settlement || '미청구';
+      document.getElementById('modal-decision-badge').textContent = deal.stage || '문의 접수';
+
+      // Specs & Dates
+      document.getElementById('edit-deal-contentType').value = deal.contentType || '';
+      document.getElementById('edit-deal-budget').value = Number(deal.budget) || 0;
+      document.getElementById('edit-deal-draftDate').value = deal.draftDate || '';
+      document.getElementById('edit-deal-uploadDate').value = deal.uploadDate || '';
+      document.getElementById('edit-deal-adEndDate').value = deal.adEndDate || '';
+      document.getElementById('edit-deal-secondary').value = deal.secondaryUsage || '';
+      document.getElementById('modal-budget-evidence-tag').textContent = deal.budgetEvidence || '';
+      document.getElementById('modal-date-evidence-tag').textContent = deal.dateEvidence || '';
+
+      // Render Cumulative Mail/DM Timeline
+      const messages = deal.messages || [];
+      document.getElementById('modal-thread-count').textContent = messages.length;
+      const timeline = document.getElementById('modal-mail-timeline');
+
+      if (messages.length === 0) {
+        timeline.innerHTML = `<p class="text-xs text-neutral-400 text-center py-6">아직 기록된 메일/DM 내역이 없습니다. 상단 버튼으로 브랜드 문의를 추가하세요.</p>`;
+      } else {
+        timeline.innerHTML = messages.map((m, idx) => {
+          const isInbound = m.direction === 'inbound';
+          return `
+            <div class="p-3.5 rounded-xl border ${isInbound ? 'bg-white border-neutral-200' : 'bg-[#18181B] text-white border-[#18181B]'} space-y-1.5">
+              <div class="flex items-center justify-between gap-2 text-[10px]">
+                <span class="font-bold ${isInbound ? 'text-[#2563EB]' : 'text-[#F4A261]'}">
+                  ${isInbound ? `📥 수신 #${idx + 1} · ${escapeHtml(m.sender || deal.brand)}` : `📤 발신 #${idx + 1} · ${escapeHtml(m.sender || '우리 매거진')}`}
+                </span>
+                <span class="${isInbound ? 'text-neutral-400' : 'text-neutral-400'}">${escapeHtml(m.timestamp || '')}</span>
+              </div>
+              <p class="text-xs leading-relaxed whitespace-pre-wrap ${isInbound ? 'text-neutral-800' : 'text-neutral-100'}">${escapeHtml(m.text)}</p>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Render Checklist
+      const checklist = deal.checklist || [];
+      const doneCount = checklist.filter(c => c.done).length;
+      document.getElementById('checklist-progress').textContent = `${doneCount}/${checklist.length} 완료`;
+      document.getElementById('modal-checklist').innerHTML = checklist.map((item, idx) => `
+        <label class="flex items-center justify-between gap-2 p-1.5 rounded-lg hover:bg-[#FAF9F6] cursor-pointer text-xs">
+          <span class="flex items-center gap-2">
+            <input type="checkbox" ${item.done ? 'checked' : ''} onchange="toggleChecklistItem(${idx})" class="rounded border-neutral-300 accent-[#18181B]">
+            <span class="${item.done ? 'line-through text-neutral-400' : 'text-neutral-800'}">${escapeHtml(item.text)}</span>
+          </span>
+          <button type="button" onclick="removeChecklistItem(${idx})" class="text-[10px] text-neutral-400 hover:text-red-500 px-1">✕</button>
+        </label>
+      `).join('');
+
+      // Render Team Comments
+      const comments = deal.comments || [];
+      document.getElementById('modal-comments-badge').textContent = comments.length;
+      document.getElementById('modal-comments-list').innerHTML = comments.length === 0
+        ? `<p class="text-xs text-neutral-400 text-center py-8">팀원들과 나눌 내부 논의 메모를 남겨보세요.</p>`
+        : comments.map(c => `
+          <div class="p-3 rounded-xl bg-white border border-neutral-200/80 space-y-1">
+            <div class="flex items-center justify-between text-[10px]">
+              <span class="font-bold text-[#18181B]">${escapeHtml(c.author)}</span>
+              <span class="text-neutral-400">${escapeHtml(c.time)}</span>
+            </div>
+            <p class="text-xs text-neutral-700 leading-relaxed">${escapeHtml(c.text)}</p>
+          </div>
+        `).join('');
+    }
+
+    window.switchModalRightTab = function(tab) {
+      const wfView = document.getElementById('modal-right-workflow-view');
+      const cmView = document.getElementById('modal-right-comments-view');
+      const wfBtn = document.getElementById('right-tab-workflow');
+      const cmBtn = document.getElementById('right-tab-comments');
+
+      if (tab === 'workflow') {
+        wfView.classList.remove('hidden');
+        cmView.classList.add('hidden');
+        wfBtn.className = 'py-2 text-xs font-bold rounded-xl bg-white text-[#18181B] shadow-2xs transition';
+        cmBtn.className = 'py-2 text-xs font-medium rounded-xl text-neutral-500 hover:text-[#18181B] transition';
+      } else {
+        wfView.classList.add('hidden');
+        cmView.classList.remove('hidden');
+        cmBtn.className = 'py-2 text-xs font-bold rounded-xl bg-white text-[#18181B] shadow-2xs transition';
+        wfBtn.className = 'py-2 text-xs font-medium rounded-xl text-neutral-500 hover:text-[#18181B] transition';
+      }
+    };
+
+    window.handleStageDropdownChange = async function(newStage) {
+      const deal = state.deals.find(d => d.id === state.selectedDealId);
+      if (!deal) return;
+      deal.stage = newStage;
+      if (newStage === '거절됨' && !deal.declinedAt) {
+        deal.declinedAt = new Date().toISOString();
+        deal.subStatus = '협업 거절 회신 완료';
+      } else if (newStage !== '거절됨') {
+        deal.declinedAt = '';
+      }
+      await saveDealToFirestore(deal);
+      showToast(`진행 단계가 '${newStage}'(으)로 변경되었습니다.`);
+    };
+
+    window.updateDealField = async function(field, value) {
+      const deal = state.deals.find(d => d.id === state.selectedDealId);
+      if (!deal) return;
+      deal[field] = value;
+      await saveDealToFirestore(deal);
+      showToast('변경 사항이 저장되었습니다.');
+    };
+
+    window.toggleFollowupIntakeBox = function(forceOpen) {
+      const box = document.getElementById('followup-intake-box');
+      const show = typeof forceOpen === 'boolean' ? forceOpen : box.classList.contains('hidden');
+      box.classList.toggle('hidden', !show);
+    };
+
+    window.appendIncomingBrandMessage = async function() {
+      const deal = state.deals.find(d => d.id === state.selectedDealId);
+      const input = document.getElementById('followup-mail-input');
+      const text = input.value.trim();
+      if (!deal || !text) {
+        showToast('브랜드로부터 받은 후속 메일 내용을 입력해주세요.');
+        return;
+      }
+
+      if (!deal.messages) deal.messages = [];
+      deal.messages.push({
+        id: 'msg-' + Date.now(),
+        direction: 'inbound',
+        sender: `${deal.brand} (후속 회신)`,
+        text,
+        timestamp: formatNowTimestamp()
+      });
+
+      input.value = '';
+      toggleFollowupIntakeBox(false);
+      await saveDealToFirestore(deal);
+      showToast('브랜드 후속 메일이 타임라인에 누적되었습니다. 확정된 조건을 자동 분석합니다...');
+      await syncDealSpecsFromFullThread(false);
+    };
+
+    window.selectModalDecision = function(decision) {
+      state.modalDecision = decision;
+      document.querySelectorAll('.modal-dec-btn').forEach(btn => {
+        const isSel = btn.dataset.mdecision === decision;
+        btn.className = isSel
+          ? 'modal-dec-btn p-2 rounded-xl border-2 border-[#18181B] bg-[#FAF9F6] text-left transition'
+          : 'modal-dec-btn p-2 rounded-xl border border-neutral-200 bg-white hover:bg-[#FAF9F6] text-left transition';
+      });
+    };
+
+    window.generateContextualReplyInModal = async function() {
+      const deal = state.deals.find(d => d.id === state.selectedDealId);
+      if (!deal) return;
+
+      const instruction = document.getElementById('modal-ai-instruction').value.trim();
+      const wrap = document.getElementById('modal-ai-reply-wrap');
+      const textarea = document.getElementById('modal-ai-reply');
+      const btn = document.getElementById('btn-modal-generate-reply');
+
+      wrap.classList.remove('hidden');
+      textarea.value = '누적된 전체 메일 대화 맥락을 읽고 맞춤형 답장을 생성하고 있습니다...';
+      btn.disabled = true;
+
+      try {
+        const threadText = (deal.messages || [])
+          .map((m, idx) => `[${idx + 1}차 ${m.direction === 'inbound' ? '브랜드 수신' : '우리 매거진 발신'}] ${m.text}`)
+          .join('\n\n');
+        const draft = await buildAIReplyDraft(threadText, state.modalDecision, instruction);
+        textarea.value = draft;
+      } finally {
+        btn.disabled = false;
+      }
+    };
+
+    window.copyModalReply = function() {
+      const text = document.getElementById('modal-ai-reply').value;
+      copyTextFallback(text, '답장 초안이 클립보드에 복사되었습니다.');
+    };
+
+    window.commitDraftReplyToThread = async function() {
+      const deal = state.deals.find(d => d.id === state.selectedDealId);
+      const replyText = document.getElementById('modal-ai-reply').value.trim();
+      if (!deal || !replyText) return;
+
+      copyTextFallback(replyText, '답장이 복사되고 타임라인에 발송 완료로 기록되었습니다.');
+
+      if (!deal.messages) deal.messages = [];
+      deal.messages.push({
+        id: 'msg-' + Date.now(),
+        direction: 'outbound',
+        sender: state.user?.displayName || '우리 매거진',
+        text: replyText,
+        timestamp: formatNowTimestamp()
+      });
+
+      const stageByDecision = {
+        proceed_ratecard: { stage: '단가표 전달 / 협의', sub: '진행 수락 및 단가표 회신 완료' },
+        clarify: { stage: '단가표 전달 / 협의', sub: '브랜드 측 자료·제품 수령 대기' },
+        decline: { stage: '거절됨', sub: '협업 거절 회신 완료' },
+        custom: null // Keep current stage when replying via custom contextual mode unless updated
+      };
+
+      const mapped = stageByDecision[state.modalDecision];
+      if (mapped) {
+        deal.stage = mapped.stage;
+        deal.subStatus = mapped.sub;
+        if (mapped.stage === '거절됨') deal.declinedAt = new Date().toISOString();
+      }
+
+      document.getElementById('modal-ai-reply-wrap').classList.add('hidden');
+      document.getElementById('modal-ai-instruction').value = '';
+      await saveDealToFirestore(deal);
+      await syncDealSpecsFromFullThread(false);
+    };
+
+    window.syncDealSpecsFromFullThread = async function(isManualTrigger) {
+      const deal = state.deals.find(d => d.id === state.selectedDealId);
+      if (!deal || !(deal.messages || []).length) return;
+
+      const btn = document.getElementById('btn-resync-thread-specs');
+      if (btn) btn.textContent = '동기화 분석 중...';
+
+      try {
+        const fullConversation = deal.messages
+          .map((m, idx) => `[${idx + 1}차 ${m.direction === 'inbound' ? '브랜드' : '매거진'} (${m.timestamp})]: ${m.text}`)
+          .join('\n\n');
+
+        const schema = {
+          type: 'OBJECT',
+          properties: {
+            budget: { type: 'NUMBER' },
+            draftDate: { type: 'STRING' },
+            uploadDate: { type: 'STRING' },
+            adEndDate: { type: 'STRING' },
+            contentType: { type: 'STRING' },
+            secondaryUsage: { type: 'STRING' },
+            dateEvidence: { type: 'STRING' },
+            summaryNote: { type: 'STRING' }
+          },
+          required: ['budget', 'draftDate', 'uploadDate', 'adEndDate', 'contentType', 'secondaryUsage', 'dateEvidence', 'summaryNote']
+        };
+
+        const sys = `당신은 누적된 브랜드 협업 메일 스레드에서 최종 합의·확정된 조건을 추출하는 AI입니다.
+중요 트래킹 규칙:
+- 1차 메일에서 브랜드가 "3월 23일~29일 사이"처럼 기간 범위로 제안했더라도, 이후 우리 매거진 발신 메일이나 브랜드 후속 회신에서 특정 하루(예: "3월 26일 업로드로 진행", "26일로 확정")가 정해졌다면 그 확정된 단일 날짜를 YYYY-MM-DD 형식(uploadDate)으로 추출하세요!
+- 아직 기간 범위 상태이고 특정 날짜가 정해지지 않았다면 uploadDate는 빈 문자열("")로 두고 dateEvidence에 희망 기간을 남기세요.
+- 여러 차례 오간 메일 중 가장 최근에 합의된 금액(만원 단위 숫자, 없으면 0), 초안 마감일(draftDate), 최종 업로드일(uploadDate), 2차 광고 종료일(adEndDate), 콘텐츠 유형(contentType), 2차 활용 조건(secondaryUsage)을 추출하세요.`;
+
+        const res = await callGeminiJSON(sys, `다음 전체 누적 대화에서 확정/변경된 조건을 추출하세요:\n\n${fullConversation}`, schema);
+        if (res) {
+          const changes = [];
+          if (Number(res.budget) > 0 && Number(res.budget) !== Number(deal.budget)) {
+            deal.budget = Number(res.budget);
+            changes.push(`협업 단가(${deal.budget}만원)`);
+          }
+          if (res.draftDate && res.draftDate !== deal.draftDate) {
+            deal.draftDate = res.draftDate;
+            changes.push(`초안일(${deal.draftDate})`);
+          }
+          if (res.uploadDate && res.uploadDate !== deal.uploadDate) {
+            deal.uploadDate = res.uploadDate;
+            deal.dateEvidence = res.dateEvidence || `누적 대화 확정: ${res.uploadDate}`;
+            changes.push(`최종 업로드일(${deal.uploadDate})`);
+          }
+          if (res.adEndDate && res.adEndDate !== deal.adEndDate) {
+            deal.adEndDate = res.adEndDate;
+            changes.push(`광고종료일(${deal.adEndDate})`);
+          }
+          if (res.contentType && res.contentType !== '미기재' && res.contentType !== deal.contentType) {
+            deal.contentType = res.contentType;
+          }
+          if (res.secondaryUsage && res.secondaryUsage !== '미기재' && res.secondaryUsage !== deal.secondaryUsage) {
+            deal.secondaryUsage = res.secondaryUsage;
+          }
+
+          if (changes.length > 0) {
+            if (!deal.comments) deal.comments = [];
+            deal.comments.push({
+              author: 'AI 조건 자동 동기화',
+              text: `누적 메일 분석 결과 ${changes.join(', ')} 항목이 최신 합의 내용으로 자동 업데이트되었습니다.`,
+              time: formatNowTimestamp()
+            });
+            await saveDealToFirestore(deal);
+            showToast(`✨ 누적 대화에서 ${changes.join(', ')} 자동 반영 완료!`);
+          } else if (isManualTrigger) {
+            showToast('누적 대화에서 새롭게 변경된 단가/일정 항목이 없습니다.');
+          }
+        }
+      } finally {
+        if (btn) btn.textContent = '↻ 누적 대화에서 조건 재추출';
+      }
+    };
+
+    window.toggleChecklistItem = async function(idx) {
+      const deal = state.deals.find(d => d.id === state.selectedDealId);
+      if (!deal || !deal.checklist?.[idx]) return;
+      deal.checklist[idx].done = !deal.checklist[idx].done;
+      await saveDealToFirestore(deal);
+    };
+
+    window.removeChecklistItem = async function(idx) {
+      const deal = state.deals.find(d => d.id === state.selectedDealId);
+      if (!deal || !deal.checklist) return;
+      deal.checklist.splice(idx, 1);
+      await saveDealToFirestore(deal);
+    };
+
+    window.addChecklistItem = async function() {
+      const deal = state.deals.find(d => d.id === state.selectedDealId);
+      const input = document.getElementById('new-checklist-input');
+      const text = input.value.trim();
+      if (!deal || !text) return;
+      if (!deal.checklist) deal.checklist = [];
+      deal.checklist.push({ text, done: false });
+      input.value = '';
+      await saveDealToFirestore(deal);
+    };
+
+    window.addDealComment = async function() {
+      const deal = state.deals.find(d => d.id === state.selectedDealId);
+      const input = document.getElementById('new-comment-input');
+      const text = input.value.trim();
+      if (!deal || !text) return;
+      if (!deal.comments) deal.comments = [];
+      deal.comments.push({
+        author: state.user?.displayName || '에디터',
+        text,
+        time: formatNowTimestamp()
+      });
+      input.value = '';
+      await saveDealToFirestore(deal);
+    };
+
+    window.deleteCurrentDeal = async function() {
+      if (!state.selectedDealId) return;
+      const targetId = state.selectedDealId;
+      closeDealModal();
+      await deleteDealFromFirestore(targetId);
+      showToast('협업 카드가 영구 삭제되었습니다.');
+    };
+
+    // ---------------------------------------------------------
+    // 11. MANUAL NEW DEAL MODAL
+    // ---------------------------------------------------------
+    window.openNewDealModal = function() {
+      const modal = document.getElementById('new-deal-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    };
+
+    window.closeNewDealModal = function() {
+      const modal = document.getElementById('new-deal-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    };
+
+    window.submitNewDeal = async function() {
+      const brand = document.getElementById('nd-brand').value.trim();
+      const campaign = document.getElementById('nd-campaign').value.trim();
+      if (!brand || !campaign) {
+        showToast('브랜드명과 캠페인명은 필수 입력 항목입니다.');
+        return;
+      }
+
+      const creator = state.user?.displayName || '에디터';
+      const newDeal = {
+        id: 'deal-' + Date.now(),
+        brand,
+        campaign,
+        category: document.getElementById('nd-category').value,
+        stage: '문의 접수',
+        subStatus: '신규 문의 검토 중',
+        contentType: document.getElementById('nd-contentType').value.trim() || '미기재',
+        budget: Number(document.getElementById('nd-budget').value) || 0,
+        budgetEvidence: '수동 등록',
+        draftDate: document.getElementById('nd-draftDate').value || '',
+        uploadDate: document.getElementById('nd-uploadDate').value || '',
+        adEndDate: '',
+        dateEvidence: '수동 등록',
+        secondaryUsage: '미기재',
+        editor: document.getElementById('nd-editor').value || creator,
+        settlement: '미청구',
+        createdBy: creator,
+        createdAt: new Date().toISOString(),
+        messages: [],
+        checklist: [],
+        comments: []
+      };
+
+      await saveDealToFirestore(newDeal);
+      document.getElementById('nd-brand').value = '';
+      document.getElementById('nd-campaign').value = '';
+      closeNewDealModal();
+      showToast(`[${brand}] 협업 건이 등록되었습니다.`);
+    };
+
+    // ---------------------------------------------------------
+    // 12. MAGAZINE SETTINGS & REPLY SAMPLES
+    // ---------------------------------------------------------
+    function populateSettingsForm() {
+      document.getElementById('set-mag-name').value = state.settings.magName || '';
+      document.getElementById('set-mag-bio').value = state.settings.magBio || '';
+      document.getElementById('set-rate-card').value = state.settings.rateCard || '';
+      document.getElementById('set-signature').value = state.settings.signature || '';
+      renderReplySamples();
+    }
+
+    function renderReplySamples() {
+      const list = document.getElementById('reply-samples-list');
+      if (!list) return;
+      const samples = state.settings.samples || [];
+      list.innerHTML = samples.length === 0
+        ? `<p class="text-xs text-neutral-400 text-center py-8">등록된 회신 샘플이 없습니다. 우측 상단 버튼으로 샘플을 추가해 주세요.</p>`
+        : samples.map((s, idx) => `
+          <div class="p-4 rounded-xl bg-[#FAF9F6] border border-neutral-200/80 space-y-2">
+            <div class="flex items-center justify-between">
+              <h4 class="text-xs font-bold text-[#18181B]">${escapeHtml(s.title)}</h4>
+              <button onclick="deleteReplySample(${idx})" class="text-[11px] text-neutral-400 hover:text-red-600">삭제</button>
+            </div>
+            <p class="text-xs text-neutral-600 whitespace-pre-wrap leading-relaxed">${escapeHtml(s.body)}</p>
+          </div>
+        `).join('');
+    }
+
+    window.openAddSampleModal = function() {
+      const modal = document.getElementById('add-sample-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    };
+
+    window.closeAddSampleModal = function() {
+      const modal = document.getElementById('add-sample-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    };
+
+    window.submitNewSample = async function() {
+      const title = document.getElementById('sample-title').value.trim();
+      const body = document.getElementById('sample-body').value.trim();
+      if (!title || !body) {
+        showToast('샘플 제목과 본문을 모두 입력해주세요.');
+        return;
+      }
+      if (!state.settings.samples) state.settings.samples = [];
+      state.settings.samples.push({ id: 'smp-' + Date.now(), title, body });
+      document.getElementById('sample-title').value = '';
+      document.getElementById('sample-body').value = '';
+      closeAddSampleModal();
+      renderReplySamples();
+      await saveMagazineSettings();
+    };
+
+    window.deleteReplySample = async function(idx) {
+      state.settings.samples.splice(idx, 1);
+      renderReplySamples();
+      await saveMagazineSettings();
+    };
+
+    window.saveMagazineSettings = async function() {
+      if (!state.workspaceId) return;
+      state.settings.magName = document.getElementById('set-mag-name').value.trim();
+      state.settings.magBio = document.getElementById('set-mag-bio').value.trim();
+      state.settings.rateCard = document.getElementById('set-rate-card').value.trim();
+      state.settings.signature = document.getElementById('set-signature').value.trim();
+
+      setSyncStatus('saving');
+      if (isLocalStandaloneMode) {
+        const store = getLocalStore();
+        if (store.workspaces[state.workspaceId]) {
+          store.workspaces[state.workspaceId].settings = JSON.parse(JSON.stringify(state.settings));
+          saveLocalStore(store);
+        }
+        setSyncStatus('saved');
+        showToast('매거진 AI 톤앤매너 및 단가표가 저장되었습니다.');
+        return;
+      }
+      const wsRef = doc(db, 'artifacts', appId, 'public', 'data', 'workspaces', state.workspaceId);
+      await updateDoc(wsRef, { settings: state.settings });
+      setSyncStatus('saved');
+      showToast('매거진 AI 톤앤매너 및 단가표가 팀 워크스페이스에 영구 저장되었습니다.');
+    };
+
+    // ---------------------------------------------------------
+    // 13. BOOTSTRAP & PERSISTENT SESSION RESTORE ON REFRESH
+    // ---------------------------------------------------------
+    window.addEventListener('DOMContentLoaded', () => {
+      const ready = initFirebase();
+      if (!ready) return;
+
+      if (isLocalStandaloneMode) {
+        const store = getLocalStore();
+        if (store.currentUid && store.users[store.currentUid]) {
+          loadUserAndEnterWorkspace(store.users[store.currentUid], store.currentUid === 'demo-local-user');
+        } else {
+          document.getElementById('auth-gate').classList.remove('hidden');
+          document.getElementById('app').classList.add('hidden');
+        }
+        return;
+      }
+
+      onAuthStateChanged(auth, async (firebaseUser) => {
+        if (firebaseUser) {
+          await loadUserAndEnterWorkspace(firebaseUser, firebaseUser.isAnonymous);
+        } else {
+          document.getElementById('auth-gate').classList.remove('hidden');
+          document.getElementById('app').classList.add('hidden');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
